@@ -32,19 +32,14 @@ Preparar el proyecto con Supabase y las pruebas, e implementar los usuarios: reg
 
 ## PLAN
 
-1. Crear el proyecto en Supabase y desactivar "Confirm email" para que los tests puedan registrar usuarios.
-2. Crear el proyecto Node e instalar supabase-js, dotenv y vitest.
-3. Crear .env, .env.example y .gitignore.
-4. Crear src/supabaseClient.js con el cliente de Supabase.
-5. Crear un test que compruebe que Supabase responde (tests/conexion.test.js).
-6. Crear la tabla perfiles en supabase/migrations/20261006_01_perfiles.sql:
+1. Crear la tabla perfiles en supabase/migrations/20261006_01_perfiles.sql:
    - un trigger que crea el perfil al registrarse con los datos que se mandan en el signUp
    - RLS: todos pueden leer los perfiles, cada uno solo puede editar el suyo
    - solo se pueden actualizar las columnas nombre, ciudad y bio (así el rol no se puede cambiar)
-7. Crear src/services/validacion.js para validar el registro y la edición del perfil.
-8. Crear src/services/auth.js con registrar, login, logout y usuarioActual.
-9. Crear src/services/perfiles.js con obtenerPerfil, editarPerfil y listarDJs.
-10. Crear los tests en tests/usuarios.test.js.
+2. Crear src/services/validacion.js para validar el registro y la edición del perfil.
+3. Crear src/services/auth.js con registrar, login, logout y usuarioActual.
+4. Crear src/services/perfiles.js con obtenerPerfil, editarPerfil y listarDJs.
+5. Crear los tests en tests/usuarios.test.js.
 
 
 ## TEST_PLAN
@@ -56,23 +51,23 @@ Preparar el proyecto con Supabase y las pruebas, e implementar los usuarios: reg
 
 | Caso | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| Supabase responde | Status 200 | |
-| Registro de un DJ correcto | Se crea su perfil con nombre, rol y ciudad | |
-| Registro con rol "admin" | Error | |
-| Registro con email mal escrito | Error | |
-| Registro con contraseña "123" | Error | |
-| Registro con nombre vacío | Error | |
-| Registro con un email ya usado | Error | |
-| Login correcto | Devuelve el usuario | |
-| Login con contraseña mal | "Email o contraseña incorrectos" | |
-| Logout | No queda usuario con sesión | |
-| Ver perfil sin sesión | Devuelve el perfil | |
-| Ver perfil que no existe | "Perfil no encontrado" | |
-| Listar DJs, página de 2 | Máximo 2 perfiles y todos DJ | |
-| Editar mi perfil | Se guardan los cambios | |
-| Editar perfil sin sesión | Error | |
-| Cambiar el rol | Error | |
-| Editar el perfil de otro directamente en la tabla | No cambia nada | |
+| Supabase responde | Status 200 | OK |
+| Registro de un DJ correcto | Se crea su perfil con nombre, rol y ciudad | OK |
+| Registro con rol "admin" | Error | OK |
+| Registro con email mal escrito | Error | OK |
+| Registro con contraseña "123" | Error | OK |
+| Registro con nombre vacío | Error | OK |
+| Registro con un email ya usado | Error | OK |
+| Login correcto | Devuelve el usuario | OK |
+| Login con contraseña mal | "Email o contraseña incorrectos" | OK |
+| Logout | No queda usuario con sesión | OK |
+| Ver perfil sin sesión | Devuelve el perfil | OK |
+| Ver perfil que no existe | "Perfil no encontrado" | OK |
+| Listar DJs, página de 2 | Máximo 2 perfiles y todos DJ | OK |
+| Editar mi perfil | Se guardan los cambios | OK |
+| Editar perfil sin sesión | Error | OK |
+| Cambiar el rol | Error | OK |
+| Editar el perfil de otro directamente en la tabla | No cambia nada | OK |
 
 
 ## AI_LOG

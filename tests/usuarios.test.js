@@ -26,7 +26,7 @@ describe('Registro', () => {
   })
 
   it('rechaza un rol no válido', async () => {
-    await expect(registrar({ email: emailUnico('x'), password: PASSWORD, nombre: 'X', rol: 'admin' }))
+    await expect(registrar({ email: emailUnico('x'), password: PASSWORD, nombre: 'Usuario Test', rol: 'admin' }))
       .rejects.toThrow(/rol/)
   })
 

@@ -10,26 +10,26 @@ Eventos. Además habrá usuarios de la aplicación, con rol de Organizador o DJ.
 
 ## Recursos secundarios
 
-Propuestas de sesión, reseñas
+Propuestas de sesión
 
 ## Relación
 
-Cada evento lo crea un organizador. Un evento puede recibir muchas propuestas de sesión, y cada propuesta la envía un DJ. Un evento puede tener muchas reseñas, que solo se pueden publicar cuando el evento está completado.
+Cada evento lo crea un organizador. Un evento puede recibir muchas propuestas de sesión, y cada propuesta la envía un DJ.
 
 ## Funcionalidades principales
 
 - Registrarse indicando el rol, iniciar y cerrar sesión.
 - Ver perfiles y listar DJs.
 - Editar el perfil propio.
-- Listar eventos.
+- Listar eventos con paginación.
 - Filtrar eventos por ciudad, fecha o género musical.
 - Ver detalles de un evento con sus propuestas.
 - Crear un evento.
 - Editar un evento.
 - Borrar un evento.
-- Enviar, modificar y retirar una propuesta de sesión.
-- Aceptar o rechazar una propuesta.
-- Publicar una reseña de un evento completado.
+- Listar las propuestas de un evento.
+- Enviar una propuesta de sesión.
+- Retirar una propuesta de sesión.
 
 ## Fuera de alcance
 
