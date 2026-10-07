@@ -14,6 +14,7 @@ Implementar el CRUD de eventos: los organizadores crean, editan y borran sus eve
   - fecha obligatoria y futura
   - ciudad obligatoria
   - presupuesto opcional, pero si se indica no puede ser negativo
+  - género opcional, pero si se indica tiene que ser uno de: techno, house, reggaeton, pop, rock, comercial u otro
   - estado solo puede ser abierto, cerrado o completado
 - Solo los usuarios con rol organizador pueden crear eventos. Un DJ no puede.
 - Ver un evento aunque no se haya iniciado sesión. Si no existe sale "Evento no encontrado".
@@ -57,6 +58,7 @@ Implementar el CRUD de eventos: los organizadores crean, editan y borran sus eve
 | Crear evento con fecha pasada | Error | |
 | Crear evento sin ciudad | Error | |
 | Crear evento con presupuesto negativo | Error | |
+| Crear evento con un género que no está en la lista | Error | |
 | Crear evento sin sesión | Error | |
 | Un DJ crea un evento | Error | |
 | Insertar un evento directamente en la tabla con otro organizador_id | Error | |
@@ -86,9 +88,15 @@ Se usó IA para:
 
 ### Prompt importante 1
 
-Ayudame a trazar el plan para realizar el CRUD de eventos.
+Ayudame a trazar el plan para realizar el CRUD de eventos.(añadiendole como argumentos ejemplos un plan)
 
 Resultado: la IA redactó un PLAN bien organizado.
 
 Decisión del estudiante:
 Dejarlo tal cual lo propone.
+
+### Correcciones manuales
+
+- La IA dejó el campo `genero` de la tabla eventos como texto libre. Se cambió para que solo admita valores de una lista (techno, house, reggaeton, pop, rock, comercial y otro).
+
+
