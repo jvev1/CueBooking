@@ -85,6 +85,7 @@ Implementar el CRUD de eventos: los organizadores crean, editan y borran sus eve
 
 Se usó IA para:
 - ayuda con el documento de la iteración
+- ayuda con codigo y tests
 
 ### Prompt importante 1
 

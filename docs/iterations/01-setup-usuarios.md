@@ -93,7 +93,7 @@ Se usó IA para:
 
 Resultado: recomendó una forma de dividir el trabajo.
 
-Decisión del estudiante: 
+### Decisión del estudiante: 
 Acepta la idea pero con correcciones, no seguia correctamente la metodologia explicada en clase.
 
 ### Prompt importante 2
@@ -102,7 +102,10 @@ Acepta la idea pero con correcciones, no seguia correctamente la metodologia exp
 
 Resultado: la IA generó un plan para la migración de perfiles, validacion.js, auth.js, perfiles.js y los tests. Después se decidió empezar con la implementación.
 
-Decisión del estudiante: 
+### Decisión del estudiante: 
 Acepta la idea pero limitando el ritmo, queria implementar todo de 1 misma tirada pero se le indicó en ir paso a paso corrigiendo errores.
+
+### Correcciones manuales
+- Se ha revisado manualmente el alcance para que no se añadan funcionalidades fuera de lo necesario.
 
 
