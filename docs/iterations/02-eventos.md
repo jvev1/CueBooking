@@ -92,7 +92,8 @@ Ayudame a trazar el plan para realizar el CRUD de eventos.(añadiendole como arg
 
 Resultado: la IA redactó un PLAN bien organizado.
 
-Decisión del estudiante:
+### Decisión del estudiante:
+
 Dejarlo tal cual lo propone.
 
 ### Correcciones manuales
