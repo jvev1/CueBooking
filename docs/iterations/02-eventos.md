@@ -53,25 +53,25 @@ Implementar el CRUD de eventos: los organizadores crean, editan y borran sus eve
 
 | Caso | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| Organizador crea un evento correcto | Se crea con su organizador_id y estado "abierto" | |
-| Crear evento sin título | Error | |
-| Crear evento con fecha pasada | Error | |
-| Crear evento sin ciudad | Error | |
-| Crear evento con presupuesto negativo | Error | |
-| Crear evento con un género que no está en la lista | Error | |
-| Crear evento sin sesión | Error | |
-| Un DJ crea un evento | Error | |
-| Insertar un evento directamente en la tabla con otro organizador_id | Error | |
-| Ver evento sin sesión | Devuelve el evento | |
-| Ver evento que no existe | "Evento no encontrado" | |
-| Editar mi evento | Se guardan los cambios | |
-| Editar con estado no válido | Error | |
-| Cambiar el organizador del evento | Error | |
-| Editar el evento de otro organizador | Error | |
-| Editar el evento de otro directamente en la tabla | No cambia nada | |
-| Borrar mi evento | El evento ya no existe | |
-| Borrar el evento de otro organizador | Error | |
-| Borrar el evento de otro directamente en la tabla | No se borra | |
+| Organizador crea un evento correcto | Se crea con su organizador_id y estado "abierto" | OK |
+| Crear evento sin título | Error | OK |
+| Crear evento con fecha pasada | Error | OK |
+| Crear evento sin ciudad | Error | OK |
+| Crear evento con presupuesto negativo | Error | OK |
+| Crear evento con un género que no está en la lista | Error | OK |
+| Crear evento sin sesión | Error | OK |
+| Un DJ crea un evento | Error | OK |
+| Insertar un evento directamente en la tabla con otro organizador_id | Error | OK |
+| Ver evento sin sesión | Devuelve el evento | OK |
+| Ver evento que no existe | "Evento no encontrado" | OK |
+| Editar mi evento | Se guardan los cambios | OK |
+| Editar con estado no válido | Error | OK |
+| Cambiar el organizador del evento | Error | OK |
+| Editar el evento de otro organizador | Error | OK |
+| Editar el evento de otro directamente en la tabla | No cambia nada | OK |
+| Borrar mi evento | El evento ya no existe | OK |
+| Borrar el evento de otro organizador | Error | OK |
+| Borrar el evento de otro directamente en la tabla | No se borra | OK |
 
 ## AI_LOG
 
@@ -116,4 +116,11 @@ Vamos con el paso 4 del plan de docs/iterations/02-eventos.md: crear tests/event
 
 - La IA dejó el campo `genero` de la tabla eventos como texto libre. Se cambió para que solo admita valores de una lista (techno, house, reggaeton, pop, rock, comercial y otro).
 
+## COMMITS RELACIONADOS
+8ef5a21004fc34be8cccf3e4a3abb3f35b980a1e  - documento iteracion 02
+9c4160e39c99ddcd2aa386d154612fbfb36b0cae - Tabla de eventos en supabase
+ef9418b4228cfdd862924a946fb5553d28ebf181 - validaciones para eventos
+60e49cadf59c4c88327382f64d71b8f257a40608 - CRUD eventos
+b350d87edb8999bee66c90f994d6b5b8835c5581 - test de eventos
+dc2ca4ee04c836c3da4cf261e9313c4b372bbbef - arreglo en los test de eventos
 
