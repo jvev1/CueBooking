@@ -96,6 +96,17 @@ Resultado: la IA redactó un PLAN bien organizado.
 
 Dejarlo tal cual lo propone.
 
+### Prompt importante 2
+
+Vamos con el paso 4 del plan de docs/iterations/02-eventos.md: crear tests/eventos.test.js.
+
+- Cubre todos los casos de la tabla del TEST_PLAN, un it por fila y en el mismo orden.
+- Sigue el estilo de tests/usuarios.test.js: vitest, emailUnico(), PASSWORD, registrar/login/logout
+  de los servicios
+- En un beforeAll registra 3 usuarios: dos organizadores (A y B) y un DJ. Antes de cada bloque,
+  haz login con el usuario que toque y logout al terminar.
+- Cada test debe ser independiente
+
 ### Correcciones manuales
 
 - La IA dejó el campo `genero` de la tabla eventos como texto libre. Se cambió para que solo admita valores de una lista (techno, house, reggaeton, pop, rock, comercial y otro).
