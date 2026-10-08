@@ -107,6 +107,11 @@ Vamos con el paso 4 del plan de docs/iterations/02-eventos.md: crear tests/event
   haz login con el usuario que toque y logout al terminar.
 - Cada test debe ser independiente
 
+### Decisión del estudiante:
+
+- En `tests/eventos.test.js` la IA metió todos los tests en un único describe e hizo login y logout dentro de cada test (unos 25 logins por ejecución).Al lanzarlo fallaban tests (también de usuarios.test.js) con "Email o contraseña incorrectos",por límite de peticiones de Supabase Auth. Se reorganizaron los tests en bloques por usuario, con un login en el beforeAll de cada bloque. Ahora se hacen unos 6 logins.
+
+
 ### Correcciones manuales
 
 - La IA dejó el campo `genero` de la tabla eventos como texto libre. Se cambió para que solo admita valores de una lista (techno, house, reggaeton, pop, rock, comercial y otro).
