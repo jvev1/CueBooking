@@ -116,3 +116,39 @@ export function validarEdicionEvento(datos) {
   comprobarCampos(datos, CAMPOS_EDITABLES_EVENTO)
   validarCamposEvento(datos)
 }
+
+const PARAMETROS_BUSQUEDA = ['ciudad', 'genero', 'desde', 'hasta', 'pagina', 'tamano']
+export const TAMANO_MAXIMO = 50
+
+function fechaFiltro(valor, campo) {
+  if (valor === undefined || valor === null) return null
+  const fecha = new Date(valor)
+  if (Number.isNaN(fecha.getTime())) throw new ErrorValidacion(`La fecha "${campo}" no es válida`)
+  return fecha
+}
+
+// Todos los parámetros son opcionales: los valores por defecto de pagina y tamano los pone buscarEventos
+export function validarBusquedaEventos(parametros = {}) {
+  if (typeof parametros !== 'object' || parametros === null) {
+    throw new ErrorValidacion('Los parámetros de búsqueda no son válidos')
+  }
+  comprobarCampos(parametros, PARAMETROS_BUSQUEDA)
+
+  const { ciudad, genero, desde, hasta, pagina, tamano } = parametros
+  textoOpcional(ciudad, 'La ciudad', 80)
+  if (genero !== undefined && genero !== null && !GENEROS.includes(genero)) {
+    throw new ErrorValidacion(`El género debe ser uno de: ${GENEROS.join(', ')}`)
+  }
+  if (pagina !== undefined && (!Number.isInteger(pagina) || pagina < 1)) {
+    throw new ErrorValidacion('La página debe ser un entero mayor o igual que 1')
+  }
+  if (tamano !== undefined && (!Number.isInteger(tamano) || tamano < 1 || tamano > TAMANO_MAXIMO)) {
+    throw new ErrorValidacion(`El tamaño debe ser un entero entre 1 y ${TAMANO_MAXIMO}`)
+  }
+
+  const fechaDesde = fechaFiltro(desde, 'desde')
+  const fechaHasta = fechaFiltro(hasta, 'hasta')
+  if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
+    throw new ErrorValidacion('La fecha "desde" no puede ser posterior a "hasta"')
+  }
+}
