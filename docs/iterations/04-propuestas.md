@@ -54,6 +54,33 @@ Que los DJs puedan enviar propuestas de sesión a los eventos, retirarlas, y que
    - en un beforeAll se registran un organizador (con un evento abierto y otro cerrado) y dos DJs
    - en el afterAll se borran los eventos, y con ellos sus propuestas
 
+## TEST_PLAN
+
+### Tests automáticos
+
+- tests/propuestas.test.js: enviar, listar y retirar propuestas, y ver un evento con sus propuestas.
+
+| Caso | Resultado esperado | Resultado obtenido |
+|---|---|---|
+| DJ envía una propuesta correcta | Se crea con su dj_id y estado "pendiente" | |
+| Enviar propuesta sin precio | Error | |
+| Enviar propuesta con precio negativo | Error | |
+| Enviar propuesta con duración 0 o mayor que 720 | Error | |
+| Enviar propuesta sin sesión | Error | |
+| Un organizador envía una propuesta | Error | |
+| Enviar propuesta a un evento que no existe | "Evento no encontrado" | |
+| Enviar propuesta a un evento cerrado | Error | |
+| El mismo DJ envía una segunda propuesta al mismo evento | Error | |
+| Insertar una propuesta directamente en la tabla con otro dj_id | Error | |
+| El organizador lista las propuestas de su evento | Ve las de todos los DJs, de la más antigua a la más reciente | |
+| Un DJ lista las propuestas de un evento | Solo ve la suya | |
+| Listar propuestas sin sesión | Lista vacía | |
+| Ver un evento (organizador) | Devuelve el evento con sus propuestas | |
+| Retirar mi propuesta | La propuesta ya no existe | |
+| Retirar la propuesta de otro DJ | Error | |
+| Borrar la propuesta de otro directamente en la tabla | No se borra | |
+| Borrar un evento con propuestas | Sus propuestas también se borran | |
+
 ## AI_LOG
 
 ### Herramienta usada
@@ -70,7 +97,5 @@ Se usó IA para:
 ### Prompt importante 1
 
 -Lee docs/iterations/04-propuestas.md y redacta un plan para su realización. No escribas código.
-
-### Decisión del estudiante:
 
 ### Correcciones manuales
