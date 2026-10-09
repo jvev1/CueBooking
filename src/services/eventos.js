@@ -1,9 +1,11 @@
 import { supabase } from '../supabaseClient.js'
 import { usuarioActual } from './auth.js'
-import { validarEvento, validarEdicionEvento } from './validacion.js'
+import { validarEvento, validarEdicionEvento, validarBusquedaEventos } from './validacion.js'
 
 // Código de Postgres cuando una política RLS o un permiso de columna rechaza la operación
 const PERMISO_DENEGADO = '42501'
+// Código de PostgREST cuando se pide una página que empieza más allá de la última fila
+const RANGO_FUERA_DE_LIMITES = 'PGRST103'
 
 /**
  * Crea un evento a nombre del usuario con sesión iniciada. Empieza en estado 'abierto'.
@@ -37,6 +39,41 @@ export async function obtenerEvento(id) {
   if (error) throw new Error(error.message)
   if (!data) throw new Error('Evento no encontrado')
   return data
+}
+
+/**
+ * Busca eventos con filtros opcionales, ordenados por fecha ascendente y paginados.
+ * Las páginas empiezan en 1. No hace falta sesión: los eventos son públicos.
+ */
+export async function buscarEventos(parametros = {}) {
+  validarBusquedaEventos(parametros)
+  const { pagina = 1, tamano = 10 } = parametros
+  const inicio = (pagina - 1) * tamano
+  const fin = inicio + tamano - 1
+
+  const { data, count, error } = await filtrarEventos(parametros, { count: 'exact' })
+    .order('fecha', { ascending: true })
+    .range(inicio, fin)
+  if (error?.code === RANGO_FUERA_DE_LIMITES) {
+    // La página se sale del final: no es un error, pero PostgREST no devuelve el total en este caso
+    const { count: total, error: errorTotal } = await filtrarEventos(parametros, { count: 'exact', head: true })
+    if (errorTotal) throw new Error(errorTotal.message)
+    return { datos: [], total, pagina, tamano }
+  }
+  if (error) throw new Error(error.message)
+
+  return { datos: data, total: count, pagina, tamano }
+}
+
+/** Consulta de eventos con los filtros de búsqueda que se hayan indicado. */
+function filtrarEventos({ ciudad, genero, desde, hasta }, opciones) {
+  let consulta = supabase.from('eventos').select('*', opciones)
+  // Se escapan % y _ para que ilike compare la ciudad entera, solo sin distinguir mayúsculas
+  if (ciudad !== undefined && ciudad !== null) consulta = consulta.ilike('ciudad', ciudad.replace(/[\\%_]/g, '\\$&'))
+  if (genero !== undefined && genero !== null) consulta = consulta.eq('genero', genero)
+  if (desde !== undefined && desde !== null) consulta = consulta.gte('fecha', desde)
+  if (hasta !== undefined && hasta !== null) consulta = consulta.lte('fecha', hasta)
+  return consulta
 }
 
 /**

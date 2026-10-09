@@ -90,6 +90,35 @@ Se usó IA para:
 
 Aceptar la propuesta, pero revisando los límites que puso la IA
 
+### Prompt importante 2
+
+Implementa el paso 2 del PLAN de docs/iterations/03-busqueda-eventos.md: añade buscarEventos a src/services/eventos.js.
+
+Contexto que debes leer antes:
+- El SPEC de esa misma iteración (requisitos y "Fuera de alcance").
+- listarDJs en src/services/perfiles.js: sigue su mismo patrón de paginación (range + count 'exact') y su misma forma de respuesta.
+- validarBusquedaEventos en src/services/validacion.js, que ya existe y valida todos los parámetros. No dupliques validaciones en el servicio.
+
+Requisitos:
+- Firma: export async function buscarEventos(parametros = {}). Usa tamano, igual que listarDJs y validarBusquedaEventos.
+- Llama primero a validarBusquedaEventos(parametros) y después aplica los valores por defecto: pagina = 1, tamano = 10.
+- No exige sesión: los eventos son públicos (igual que obtenerEvento).
+- Aplica cada filtro solo si viene con valor (ni undefined ni null):
+  - ciudad -> ilike('ciudad', ciudad), sin comodines: coincidencia exacta sin distinguir mayúsculas
+  - genero -> eq('genero', genero)
+  - desde  -> gte('fecha', desde)
+  - hasta  -> lte('fecha', hasta)
+- Ordena por fecha ascendente.
+- Pagina con range((pagina - 1) * tamano, pagina * tamano - 1).
+- Devuelve { datos, total, pagina, tamano }. Si no hay resultados o la página se sale del final, devuelve datos: [] (nunca null) y el total que corresponda. No lances un error.
+- Los errores de Supabase se lanzan como new Error(error.message), igual que en el resto del fichero.
+
+Todavia no toques los tests (son el paso 3) ni otros ficheros.
+
+### Decisión del estudiante:
+
+La IA añadió algo que no se pedía: escapar los caracteres % y _ en el filtro de ciudad, porque ilike los trata como comodines (por ejemplo, buscar "%" devolvería todos los eventos). Tras entender qué hace, se ha dejado así, ya que garantiza la coincidencia exacta de ciudad que pide el SPEC.
+
 ### Correcciones manuales
 
 - En validacion.js la IA repitió en validarBusquedaEventos la comprobación del género que ya existía en validarCamposEvento.Se sacó a una función común validarGenero(genero).
