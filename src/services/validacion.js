@@ -58,6 +58,11 @@ function textoObligatorio(valor, mensaje) {
   if (typeof valor !== 'string' || valor.trim().length === 0) throw new ErrorValidacion(mensaje)
 }
 
+function generoOpcional(genero) {
+  if (genero === undefined || genero === null) return
+  if (!GENEROS.includes(genero)) throw new ErrorValidacion(`El género debe ser uno de: ${GENEROS.join(', ')}`)
+}
+
 function validarFechaEvento(fecha) {
   const valor = new Date(fecha)
   if (fecha === undefined || fecha === null || Number.isNaN(valor.getTime())) {
@@ -72,9 +77,7 @@ function validarCamposEvento(datos) {
   if ('ciudad' in datos) textoObligatorio(datos.ciudad, 'La ciudad es obligatoria')
   textoOpcional(datos.descripcion, 'La descripción')
   textoOpcional(datos.lugar, 'El lugar')
-  if (datos.genero !== undefined && datos.genero !== null && !GENEROS.includes(datos.genero)) {
-    throw new ErrorValidacion(`El género debe ser uno de: ${GENEROS.join(', ')}`)
-  }
+  generoOpcional(datos.genero)
   if (datos.presupuesto !== undefined && datos.presupuesto !== null) {
     if (typeof datos.presupuesto !== 'number' || Number.isNaN(datos.presupuesto)) {
       throw new ErrorValidacion('El presupuesto debe ser un número')
@@ -136,9 +139,7 @@ export function validarBusquedaEventos(parametros = {}) {
 
   const { ciudad, genero, desde, hasta, pagina, tamano } = parametros
   textoOpcional(ciudad, 'La ciudad', 80)
-  if (genero !== undefined && genero !== null && !GENEROS.includes(genero)) {
-    throw new ErrorValidacion(`El género debe ser uno de: ${GENEROS.join(', ')}`)
-  }
+  generoOpcional(genero)
   if (pagina !== undefined && (!Number.isInteger(pagina) || pagina < 1)) {
     throw new ErrorValidacion('La página debe ser un entero mayor o igual que 1')
   }

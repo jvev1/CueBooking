@@ -90,3 +90,6 @@ Se usó IA para:
 
 Aceptar la propuesta, pero revisando los límites que puso la IA
 
+### Correcciones manuales
+
+- En validacion.js la IA repitió en validarBusquedaEventos la comprobación del género que ya existía en validarCamposEvento.Se sacó a una función común validarGenero(genero).
