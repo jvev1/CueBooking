@@ -37,4 +37,40 @@ Que los DJs puedan enviar propuestas de sesión a los eventos, retirarlas, y que
 - Paginación de las propuestas.
 - Reseñas.
 
+## PLAN
 
+1. Crear la tabla propuestas en supabase/migrations/20261010_03_propuestas.sql:
+   - evento_id referencia a eventos y dj_id referencia a perfiles, los dos con on delete cascade
+   - estado por defecto "pendiente" y checks de precio, duración y estado
+   - unique (evento_id, dj_id) para que un DJ solo envíe una propuesta por evento
+   - RLS select: el DJ autor y el organizador del evento
+   - RLS insert: solo un usuario con rol dj, con dj_id igual a su id y a un evento en estado "abierto"
+   - RLS delete: solo el DJ autor
+   - sin permiso de update; al insertar no se puede elegir el estado
+2. Añadir a src/services/validacion.js validarPropuesta (precio, duración y descripción).
+3. Crear src/services/propuestas.js con enviarPropuesta(eventoId, datos), listarPropuestas(eventoId) y retirarPropuesta(id).
+4. Cambiar obtenerEvento en src/services/eventos.js para que devuelva el evento con sus propuestas.
+5. Crear los tests en tests/propuestas.test.js:
+   - en un beforeAll se registran un organizador (con un evento abierto y otro cerrado) y dos DJs
+   - en el afterAll se borran los eventos, y con ellos sus propuestas
+
+## AI_LOG
+
+### Herramienta usada
+
+- Herramienta: Claude Code
+- Modelo: Claude Opus 5.5
+- Tipo: modelo en la nube
+
+### Uso realizado
+
+Se usó IA para:
+- ayuda con la documentación
+
+### Prompt importante 1
+
+-Lee docs/iterations/04-propuestas.md y redacta un plan para su realización. No escribas código.
+
+### Decisión del estudiante:
+
+### Correcciones manuales
