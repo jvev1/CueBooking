@@ -98,4 +98,39 @@ Se usó IA para:
 
 -Lee docs/iterations/04-propuestas.md y redacta un plan para su realización. No escribas código.
 
+### Prompt importante 2
+
+-Implementa el paso 1 del PLAN, crear supabase/migrations/20261010_03_propuestas.sql.
+
+Antes de escribir, lee:
+- docs/iterations/04-propuestas.md (SPEC y PLAN)
+- supabase/migrations/20261006_01_perfiles.sql y 20261007_02_eventos.sql, y sigue su mismo estilo: comentario de cabecera, sección "Control de acceso (RLS)" y permisos por columna al final.
+
+La tabla public.propuestas debe tener:
+- id uuid primary key default gen_random_uuid()
+- evento_id → eventos(id) on delete cascade, not null
+- dj_id → perfiles(id) on delete cascade, not null
+- precio numeric(10,2) not null, check >= 0
+- duracion_minutos integer not null, check entre 1 y 720
+- descripcion text, check char_length <= 1000
+- estado text not null default 'pendiente'.
+- creado_en timestamptz not null default now()
+- unique (evento_id, dj_id)
+
+Políticas RLS (todas "to authenticated"):
+- select: el DJ autor (dj_id = auth.uid()) o el organizador del evento (exists en eventos con organizador_id = auth.uid())
+- insert: dj_id = auth.uid(), el perfil tiene rol 'dj' y el evento existe y está en estado 'abierto'
+- delete: solo el DJ autor
+- sin política de update
+
+Permisos por columna, como en eventos:
+- revoke insert, update on propuestas from anon, authenticated
+- grant insert (evento_id, dj_id, precio, duracion_minutos, descripcion) to authenticated, para que no se pueda elegir el estado
+
+Solo crea ese archivo. Al terminar, explícame cada política en una línea y dime si hay algo del SPEC que la migración no cubra.
+
+### Decisión del estudiante:
+
+- La IA propuso check de estado en ('pendiente', 'aceptada', 'rechazada') pero se ha reducido a solo 'pendiente' de monmento. Aceptar o rechazar propuestas está fuera de alcance en esta iteración, así que en ella ninguna propuesta puede tener otro estado. Cuando se implemente, se ampliará el check con una nueva migración.
+
 ### Correcciones manuales
