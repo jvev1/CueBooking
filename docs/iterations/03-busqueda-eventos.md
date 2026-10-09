@@ -122,3 +122,4 @@ La IA añadió algo que no se pedía: escapar los caracteres % y _ en el filtro 
 ### Correcciones manuales
 
 - En validacion.js la IA repitió en validarBusquedaEventos la comprobación del género que ya existía en validarCamposEvento.Se sacó a una función común validarGenero(genero).
+- En tests/busqueda.test.js el test "sin parámetros usa la página 1 y tamaño 10" que generó la IA era flojo. Solo comprobaba que la respuesta traía pagina 1 y tamano 10, que son los mismos valores que pone la función, y que llegaban 10 eventos o menos, algo que se cumple aunque no se limite nada si hay pocos eventos. Se cambia para crear 11 eventos y comprobar que sin parámetros llegan exactamente 10.

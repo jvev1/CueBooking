@@ -12,6 +12,9 @@ const dentroDeDias = (dias) => new Date(Date.now() + dias * DIA).toISOString()
 
 // Ciudad inventada y única: así los eventos de otros tests no afectan a los resultados
 const CIUDAD = `Ciudad Test ${Date.now()}`
+// Segunda ciudad única con 11 eventos, para comprobar que por defecto llegan exactamente 10
+const CIUDAD_PAGINACION = `Ciudad Paginacion ${Date.now()}`
+const EVENTOS_PAGINACION = 11
 
 // Se crean desordenados a propósito para comprobar que la búsqueda los ordena por fecha
 const EVENTOS = {
@@ -28,6 +31,7 @@ describe('Búsqueda de eventos', () => {
   const ids = {}
   // Fecha de cada evento tal y como la guarda la base de datos
   const fechas = {}
+  const idsPaginacion = []
 
   const titulos = (resultado) => resultado.datos.map((e) => e.titulo)
 
@@ -39,13 +43,17 @@ describe('Búsqueda de eventos', () => {
       ids[clave] = evento.id
       fechas[clave] = evento.fecha
     }
+    for (let i = 1; i <= EVENTOS_PAGINACION; i++) {
+      const evento = await crearEvento({ titulo: `Paginación ${i}`, fecha: dentroDeDias(i), ciudad: CIUDAD_PAGINACION })
+      idsPaginacion.push(evento.id)
+    }
     // Las búsquedas se hacen sin sesión
     await logout()
   })
 
   afterAll(async () => {
     await login(email, PASSWORD)
-    await supabase.from('eventos').delete().in('id', Object.values(ids))
+    await supabase.from('eventos').delete().in('id', [...Object.values(ids), ...idsPaginacion])
     await logout()
   })
 
@@ -55,10 +63,11 @@ describe('Búsqueda de eventos', () => {
       expect(resultado.datos.length).toBeGreaterThan(0)
     })
 
-    it('sin parámetros usa la página 1 y tamaño 10', async () => {
-      const resultado = await buscarEventos()
-      expect(resultado).toMatchObject({ pagina: 1, tamano: 10 })
-      expect(resultado.datos.length).toBeLessThanOrEqual(10)
+    it('sin página ni tamaño usa la página 1 y tamaño 10', async () => {
+      // Solo se indica la ciudad: pagina y tamano se dejan por defecto
+      const resultado = await buscarEventos({ ciudad: CIUDAD_PAGINACION })
+      expect(resultado).toMatchObject({ total: EVENTOS_PAGINACION, pagina: 1, tamano: 10 })
+      expect(resultado.datos).toHaveLength(10)
     })
 
     it('ordena los resultados por fecha ascendente', async () => {
