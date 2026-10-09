@@ -50,24 +50,24 @@ Listar los eventos con paginación y poder filtrarlos por ciudad, fechas y géne
 
 | Caso | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| Listar eventos sin sesión | Devuelve eventos | |
-| Listar sin parámetros | Página 1 y tamaño 10 | |
-| Filtrar por ciudad | Solo eventos de esa ciudad | |
-| Filtrar por ciudad con otras mayúsculas | Mismos resultados | |
-| Filtrar por género | Solo eventos de ese género | |
-| Filtrar con desde | Solo eventos con fecha igual o posterior | |
-| Filtrar con hasta | Solo eventos con fecha igual o anterior | |
-| Combinar ciudad, género y fechas | Solo eventos que cumplen todos los filtros | |
-| Orden de los resultados | Ordenados por fecha ascendente | |
-| Página 1 de tamaño 2 | 2 eventos y el total correcto | |
-| Página 2 de tamaño 2 | Los 2 eventos siguientes, sin repetir los de la página 1 | |
-| Página más allá del final | Lista vacía | |
-| Filtros sin resultados | Lista vacía y total 0 | |
-| Género que no está en la lista | Error | |
-| Página 0 | Error | |
-| Tamaño 0 o mayor que 50 | Error | |
-| Fecha desde no válida | Error | |
-| Desde posterior a hasta | Error | |
+| Listar eventos sin sesión | Devuelve eventos | OK |
+| Listar sin página ni tamaño | Página 1 y tamaño 10 | OK |
+| Filtrar por ciudad | Solo eventos de esa ciudad | OK |
+| Filtrar por ciudad con otras mayúsculas | Mismos resultados | OK |
+| Filtrar por género | Solo eventos de ese género | OK |
+| Filtrar con desde | Solo eventos con fecha igual o posterior | OK |
+| Filtrar con hasta | Solo eventos con fecha igual o anterior | OK |
+| Combinar ciudad, género y fechas | Solo eventos que cumplen todos los filtros | OK |
+| Orden de los resultados | Ordenados por fecha ascendente | OK |
+| Página 1 de tamaño 2 | 2 eventos y el total correcto | OK |
+| Página 2 de tamaño 2 | Los 2 eventos siguientes, sin repetir los de la página 1 | OK |
+| Página más allá del final | Lista vacía | OK |
+| Filtros sin resultados | Lista vacía y total 0 | OK |
+| Género que no está en la lista | Error | OK |
+| Página 0 | Error | OK |
+| Tamaño 0 o mayor que 50 | Error | OK |
+| Fecha desde no válida | Error | OK |
+| Desde posterior a hasta | Error | OK |
 
 ## AI_LOG
 
@@ -80,7 +80,10 @@ Listar los eventos con paginación y poder filtrarlos por ciudad, fechas y géne
 ### Uso realizado
 
 Se usó IA para:
-- ayuda con el documento de la iteración
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN)
+- ayuda con el código: validarBusquedaEventos y buscarEventos
+- ayuda con los tests de tests/busqueda.test.js
+- revisar los tests generados para encontrar puntos débiles
 
 ### Prompt importante 1
 
@@ -123,3 +126,13 @@ La IA añadió algo que no se pedía: escapar los caracteres % y _ en el filtro 
 
 - En validacion.js la IA repitió en validarBusquedaEventos la comprobación del género que ya existía en validarCamposEvento.Se sacó a una función común validarGenero(genero).
 - En tests/busqueda.test.js el test "sin parámetros usa la página 1 y tamaño 10" que generó la IA era flojo. Solo comprobaba que la respuesta traía pagina 1 y tamano 10, que son los mismos valores que pone la función, y que llegaban 10 eventos o menos, algo que se cumple aunque no se limite nada si hay pocos eventos. Se cambia para crear 11 eventos y comprobar que sin parámetros llegan exactamente 10.
+
+## COMMITS RELACIONADOS
+d8d5a80de4a3e096b6b265664ec5e9995efb945b - Redactado spec de la iteracion 3
+a442f27fbaef5688f2231f96098640b8a5a34b4f - Plan y test plan
+c7bbbdfe431882c0bf744cf7642cd32ac95c1fc3 - validaciones
+937b9b05af7a848424c591c932bacf999130dff9 - funcion para comprobar Genero
+29191e9041a7d83040ad74d8c47f7f75c47b3647 - Añadido buscarEventos
+ac984fffb785920250f6a9c1f7866f7caf80d445 - Tests añadidos
+7a70edb1a423d139ee8c9f3c0e9edd0cf4390605 - pequeño arrelgo en los test
+
