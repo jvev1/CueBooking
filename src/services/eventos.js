@@ -1,6 +1,7 @@
 import { supabase } from '../supabaseClient.js'
 import { usuarioActual } from './auth.js'
 import { validarEvento, validarEdicionEvento, validarBusquedaEventos } from './validacion.js'
+import { listarPropuestas } from './propuestas.js'
 
 // Código de Postgres cuando una política RLS o un permiso de columna rechaza la operación
 const PERMISO_DENEGADO = '42501'
@@ -29,7 +30,10 @@ export async function crearEvento(datos) {
   return data
 }
 
-/** Devuelve un evento. No hace falta sesión: los eventos son públicos. */
+/**
+ * Devuelve un evento con sus propuestas. No hace falta sesión: los eventos son públicos.
+ * Las propuestas incluidas son las que el usuario puede ver según RLS (sin sesión, ninguna).
+ */
 export async function obtenerEvento(id) {
   const { data, error } = await supabase
     .from('eventos')
@@ -38,7 +42,9 @@ export async function obtenerEvento(id) {
     .maybeSingle()
   if (error) throw new Error(error.message)
   if (!data) throw new Error('Evento no encontrado')
-  return data
+
+  const propuestas = await listarPropuestas(id)
+  return { ...data, propuestas }
 }
 
 /**

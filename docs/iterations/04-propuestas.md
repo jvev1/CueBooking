@@ -131,6 +131,6 @@ Solo crea ese archivo. Al terminar, explícame cada política en una línea y di
 
 ### Decisión del estudiante:
 
-- La IA propuso check de estado en ('pendiente', 'aceptada', 'rechazada') pero se ha reducido a solo 'pendiente' de monmento. Aceptar o rechazar propuestas está fuera de alcance en esta iteración, así que en ella ninguna propuesta puede tener otro estado. Cuando se implemente, se ampliará el check con una nueva migración.
+- La IA propuso check de estado en ('pendiente', 'aceptada', 'rechazada') pero se ha reducido a solo 'pendiente' de momento. Aceptar o rechazar propuestas está fuera de alcance en esta iteración, así que en ella ninguna propuesta puede tener otro estado. Cuando se implemente, se ampliará el check con una nueva migración.
 
 ### Correcciones manuales
