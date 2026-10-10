@@ -153,3 +153,25 @@ export function validarBusquedaEventos(parametros = {}) {
     throw new ErrorValidacion('La fecha "desde" no puede ser posterior a "hasta"')
   }
 }
+
+// Al enviar una propuesta no se indica el estado (empieza en 'pendiente'), ni el DJ (es el usuario con sesión),
+// ni el evento (se pasa aparte)
+const CAMPOS_NUEVA_PROPUESTA = ['precio', 'duracion_minutos', 'descripcion']
+export const DURACION_MAXIMA = 720
+
+export function validarPropuesta(datos) {
+  if (!datos || typeof datos !== 'object') throw new ErrorValidacion('No hay datos de la propuesta')
+  comprobarCampos(datos, CAMPOS_NUEVA_PROPUESTA)
+
+  const { precio, duracion_minutos, descripcion } = datos
+  if (precio === undefined || precio === null) throw new ErrorValidacion('El precio es obligatorio')
+  if (typeof precio !== 'number' || !Number.isFinite(precio)) throw new ErrorValidacion('El precio debe ser un número')
+  if (precio < 0) throw new ErrorValidacion('El precio no puede ser negativo')
+
+  if (duracion_minutos === undefined || duracion_minutos === null) throw new ErrorValidacion('La duración es obligatoria')
+  if (!Number.isInteger(duracion_minutos) || duracion_minutos < 1 || duracion_minutos > DURACION_MAXIMA) {
+    throw new ErrorValidacion(`La duración debe ser un entero entre 1 y ${DURACION_MAXIMA} minutos`)
+  }
+
+  textoOpcional(descripcion, 'La descripción', 1000)
+}
