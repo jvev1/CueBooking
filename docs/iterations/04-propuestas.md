@@ -62,24 +62,24 @@ Que los DJs puedan enviar propuestas de sesión a los eventos, retirarlas, y que
 
 | Caso | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| DJ envía una propuesta correcta | Se crea con su dj_id y estado "pendiente" | |
-| Enviar propuesta sin precio | Error | |
-| Enviar propuesta con precio negativo | Error | |
-| Enviar propuesta con duración 0 o mayor que 720 | Error | |
-| Enviar propuesta sin sesión | Error | |
-| Un organizador envía una propuesta | Error | |
-| Enviar propuesta a un evento que no existe | "Evento no encontrado" | |
-| Enviar propuesta a un evento cerrado | Error | |
-| El mismo DJ envía una segunda propuesta al mismo evento | Error | |
-| Insertar una propuesta directamente en la tabla con otro dj_id | Error | |
-| El organizador lista las propuestas de su evento | Ve las de todos los DJs, de la más antigua a la más reciente | |
-| Un DJ lista las propuestas de un evento | Solo ve la suya | |
-| Listar propuestas sin sesión | Lista vacía | |
-| Ver un evento (organizador) | Devuelve el evento con sus propuestas | |
-| Retirar mi propuesta | La propuesta ya no existe | |
-| Retirar la propuesta de otro DJ | Error | |
-| Borrar la propuesta de otro directamente en la tabla | No se borra | |
-| Borrar un evento con propuestas | Sus propuestas también se borran | |
+| DJ envía una propuesta correcta | Se crea con su dj_id y estado "pendiente" | OK |
+| Enviar propuesta sin precio | Error | OK |
+| Enviar propuesta con precio negativo | Error | OK |
+| Enviar propuesta con duración 0 o mayor que 720 | Error | OK |
+| Enviar propuesta sin sesión | Error | OK |
+| Un organizador envía una propuesta | Error | OK |
+| Enviar propuesta a un evento que no existe | "Evento no encontrado" | OK |
+| Enviar propuesta a un evento cerrado | Error | OK |
+| El mismo DJ envía una segunda propuesta al mismo evento | Error | OK |
+| Insertar una propuesta directamente en la tabla con otro dj_id | Error | OK |
+| El organizador lista las propuestas de su evento | Ve las de todos los DJs, de la más antigua a la más reciente | OK |
+| Un DJ lista las propuestas de un evento | Solo ve la suya | OK |
+| Listar propuestas sin sesión | Lista vacía | OK |
+| Ver un evento (organizador) | Devuelve el evento con sus propuestas | OK |
+| Retirar mi propuesta | La propuesta ya no existe | OK |
+| Retirar la propuesta de otro DJ | Error | OK |
+| Borrar la propuesta de otro directamente en la tabla | No se borra | OK |
+| Borrar un evento con propuestas | Sus propuestas también se borran | OK |
 
 ## AI_LOG
 
@@ -92,7 +92,12 @@ Que los DJs puedan enviar propuestas de sesión a los eventos, retirarlas, y que
 ### Uso realizado
 
 Se usó IA para:
-- ayuda con la documentación
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN)
+- ayuda con la migración de la tabla propuestas y sus políticas RLS
+- ayuda con el código: src/services/propuestas.js y el cambio de obtenerEvento
+- ayuda con los tests de tests/propuestas.test.js
+- entender decisiones de la IA 
+- revisar el código y los tests generados para encontrar puntos débiles
 
 ### Prompt importante 1
 
@@ -133,5 +138,26 @@ Solo crea ese archivo. Al terminar, explícame cada política en una línea y di
 
 - La IA propuso check de estado en ('pendiente', 'aceptada', 'rechazada') pero se ha reducido a solo 'pendiente' de momento. Aceptar o rechazar propuestas está fuera de alcance en esta iteración, así que en ella ninguna propuesta puede tener otro estado. Cuando se implemente, se ampliará el check con una nueva migración.
 
+### Prompt importante 3
+
+Implementa el paso 4 del PLAN: cambia obtenerEvento en src/services/eventos.js para que devuelva el evento con sus propuestas.
+
+- Reutiliza listarPropuestas de src/services/propuestas.js; no filtres las propuestas en el código, que lo haga la política RLS.
+- Devuelve { ...evento, propuestas }. Si el evento no existe, sigue lanzando "Evento no encontrado".
+- No toques los tests.
+
+### Decisión del estudiante:
+
+- Se acepta que obtenerEvento llame a listarPropuestas en vez de filtrar las propuestas a mano: así las propuestas que se ven las decide RLS (el organizador todas, un DJ solo la suya, sin sesión ninguna). Se comprobó que los tests de eventos seguían pasando.
+
 ### Correcciones manuales
 - La IA puso como test el envío de una propuesta que solo servía para preparar el test de borrado en cascada. No comprobaba ningún requisito, así que se movió al beforeAll del bloque.
+
+## COMMITS RELACIONADOS
+e25f148cf6eaf2de63228fa1027283ec520cfffd - redactado spec it4
+dfabc43e775290326a57ec655e4063d0dbad9923 - plan it4
+b2b526ac74c05d2d2e7ae1be1e06b7d3c3fe4ca7 - test plan
+40390ce4f69383699397790777b13c15c6845456 - tabla propuestas
+240ac300a164297fd1bcde13b6fcc07c8487017b - validaciones
+f2b762d68f4e7bae1fe0e09c93627f4c2ed98128 - propuestas.js
+9aae8f4a51b34e8260f0a1baccce3c7ea5330bcc - añadidos test
