@@ -33,7 +33,7 @@ Campos:
 - fecha
 - ciudad
 - lugar
-- genero
+- genero (techno, house, reggaeton, pop, rock, comercial u otro)
 - presupuesto
 - estado (abierto, cerrado o completado)
 - creado_en
@@ -47,26 +47,18 @@ Campos:
 - precio
 - duracion_minutos
 - descripcion
-- estado (pendiente, aceptada o rechazada)
+- estado (por ahora solo pendiente; aceptar o rechazar propuestas está fuera de alcance)
 - creado_en
 
-### resenas
-
-Campos:
-- id
-- evento_id
-- autor_id
-- puntuacion
-- comentario
-- creado_en
+Un DJ solo puede enviar una propuesta a cada evento. Si se borra el evento, se borran sus propuestas.
 
 ## Capa de servicios
 
 - auth.js: registrar, login, logout, usuarioActual
 - perfiles.js: obtenerPerfil, editarPerfil, listarDJs
-- eventos.js: crearEvento, buscarEventos, obtenerEvento, modificarEvento, eliminarEvento
-- propuestas.js: enviarPropuesta, listarPropuestas, modificarPropuesta, retirarPropuesta, cambiarEstadoPropuesta
-- resenas.js: crearResena, listarResenas
+- eventos.js: crearEvento, buscarEventos, obtenerEvento (devuelve el evento con sus propuestas), modificarEvento, eliminarEvento
+- propuestas.js: enviarPropuesta, listarPropuestas, retirarPropuesta
+- validacion.js: validación de los datos antes de enviarlos a Supabase (registro, perfil, eventos, búsqueda y propuestas)
 
 ## Estructura de carpetas
 
