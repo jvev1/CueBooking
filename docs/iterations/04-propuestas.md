@@ -134,3 +134,4 @@ Solo crea ese archivo. Al terminar, explícame cada política en una línea y di
 - La IA propuso check de estado en ('pendiente', 'aceptada', 'rechazada') pero se ha reducido a solo 'pendiente' de momento. Aceptar o rechazar propuestas está fuera de alcance en esta iteración, así que en ella ninguna propuesta puede tener otro estado. Cuando se implemente, se ampliará el check con una nueva migración.
 
 ### Correcciones manuales
+- La IA puso como test el envío de una propuesta que solo servía para preparar el test de borrado en cascada. No comprobaba ningún requisito, así que se movió al beforeAll del bloque.
