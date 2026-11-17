@@ -4,7 +4,7 @@
 
 ### Objetivo
 
-Crear el proyecto del frontend en Vue y conectarlo al backend de Supabase, para que un usuario pueda iniciar sesión y cerrar la sesión.
+Crear el proyecto del frontend en Vue y conectarlo al backend de Supabase, para que un usuario pueda iniciar y cerrar la sesión.
 
 ### Requisitos
 
@@ -36,6 +36,15 @@ Crear el proyecto del frontend en Vue y conectarlo al backend de Supabase, para 
 - Recuperar la contraseña.
 
 ## PLAN
+
+1. Crear el proyecto en /frontend-vue y añadir `@supabase/supabase-js` y PrimeVue. Crear frontend-vue/.env.example con VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.
+2. Copiar en frontend-vue/src/services los servicios auth.js, perfiles.js y validacion.js, con un supabaseClient.js nuevo que lee `import.meta.env`. Cambiar login en auth.js para distinguir las credenciales incorrectas de un fallo de conexión, también en el backend.
+3. Store de Pinia `sesion` con el usuario y su perfil, y las acciones cargarSesion, login y logout. En main.js se espera a cargarSesion antes de montar la aplicación, para mantener la sesión al recargar.
+4. Router con / (InicioView) y /login (LoginView). Si ya hay sesión, /login lleva a /.
+5. Componentes:
+   - CabeceraApp: nombre, rol y "Cerrar sesión" con sesión; "Iniciar sesión" sin ella
+   - LoginView: formulario con PrimeVue, validación al enviar, botón cargando durante el envío y mensaje de error
+6. Script scripts/crear-usuarios-prueba.js en el backend para crear un organizador y un DJ fijos. Actualizar ARCHITECTURE.md y README.md.
 
 ## TEST_PLAN
 
