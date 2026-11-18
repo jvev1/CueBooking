@@ -64,6 +64,27 @@ describe('Store de sesión', () => {
     expect(obtenerPerfil).not.toHaveBeenCalled()
   })
 
+  it('si falla el perfil tras un login correcto, cierra la sesión y relanza el error', async () => {
+    auth.login.mockResolvedValue(USUARIO)
+    obtenerPerfil.mockRejectedValue(new Error('Perfil no encontrado'))
+    const sesion = useSesionStore()
+
+    await expect(sesion.login('org@gmail.com', 'prueba123')).rejects.toThrow('Perfil no encontrado')
+    expect(auth.logout).toHaveBeenCalled()
+    expect(sesion.haySesion).toBe(false)
+    expect(sesion.perfil).toBeNull()
+  })
+
+  it('si falla el perfil al recargar, cierra la sesión y relanza el error', async () => {
+    auth.usuarioActual.mockResolvedValue(USUARIO)
+    obtenerPerfil.mockRejectedValue(new Error('Perfil no encontrado'))
+    const sesion = useSesionStore()
+
+    await expect(sesion.cargarSesion()).rejects.toThrow('Perfil no encontrado')
+    expect(auth.logout).toHaveBeenCalled()
+    expect(sesion.haySesion).toBe(false)
+  })
+
   it('logout no deja usuario ni perfil', async () => {
     const sesion = useSesionStore()
     sesion.usuario = USUARIO
