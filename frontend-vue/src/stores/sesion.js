@@ -23,14 +23,29 @@ export const useSesionStore = defineStore('sesion', {
     /** Recupera la sesión que Supabase guarda en el navegador (por ejemplo, al recargar la página). */
     async cargarSesion() {
       const usuario = await auth.usuarioActual()
-      this.perfil = usuario ? await obtenerPerfil(usuario.id) : null
+      if (!usuario) {
+        this.usuario = null
+        this.perfil = null
+        return
+      }
+      try {
+        this.perfil = await obtenerPerfil(usuario.id)
+      } catch (error) {
+        await auth.logout()
+        throw error
+      }
       this.usuario = usuario
     },
 
     /** Si el login falla, se lanza el error del servicio y no queda sesión. */
     async login(email, password) {
       const usuario = await auth.login(email, password)
-      this.perfil = await obtenerPerfil(usuario.id)
+      try {
+        this.perfil = await obtenerPerfil(usuario.id)
+      } catch (error) {
+        await auth.logout()
+        throw error
+      }
       this.usuario = usuario
     },
 
