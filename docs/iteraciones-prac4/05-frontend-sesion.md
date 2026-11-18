@@ -85,6 +85,10 @@ Crear el proyecto del frontend en Vue y conectarlo al backend de Supabase, para 
 - Tipo: modelo en la nube
 
 ### Uso realizado
+Se usó IA para:
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN), compactando el PLAN y dejando solo tests automáticos
+- ayuda con el código: proyecto Vue, copia de los servicios con el cliente para el navegador, store de sesión, router, CabeceraApp y LoginView
+- ayuda con los tests del frontend (Vitest, Vue Test Utils y mocks de los servicios)
 
 ### Prompt importante 1
 Ejecuta la iteración 05: lee la SPEC y el PLAN en `docs/iteraciones-prac4/05-frontend-sesion.md` e implementa el PLAN paso a paso, en orden. Haz solo lo que piden la SPEC y el PLAN, sin extras, y respeta el estilo y el idioma del código existente. Cuando termines resume qué hiciste y qué no pudiste verificar. No hagas commits.
