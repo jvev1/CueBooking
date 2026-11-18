@@ -9,7 +9,34 @@
 
 ## Frontend
 
-- Todavía no decidido
+- Vue 3 con Vite, en la carpeta /frontend-vue del mismo repositorio
+- Pinia para el estado compartido, Vue Router para la navegación y PrimeVue (tema Aura) como biblioteca de componentes
+- Tests con Vitest, Vue Test Utils y jsdom; los servicios se sustituyen por mocks, así que no necesitan el backend
+
+### Acceso al backend
+
+- Los servicios auth.js, perfiles.js y validacion.js se copian en frontend-vue/src/services. Se copian en lugar de importarlos del backend porque src/supabaseClient.js usa dotenv y process.env, que no existen en el navegador.
+- frontend-vue/src/supabaseClient.js crea el cliente con VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY (import.meta.env). Los servicios solo importan `../supabaseClient.js`, así que funcionan sin cambios.
+- Los componentes y los stores solo usan los servicios, nunca Supabase directamente.
+- login distingue las credenciales incorrectas ("Email o contraseña incorrectos") de un fallo de conexión ("No se ha podido conectar con el servidor"). El cambio se hizo en las dos copias de auth.js.
+- validacion.js del frontend añade validarLogin, que devuelve los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo del formulario.
+
+### Estado compartido
+
+- Store `sesion` (stores/sesion.js): usuario de Supabase Auth y su perfil (nombre y rol). Getters haySesion y rolTexto. Acciones cargarSesion, login y logout.
+- Supabase guarda la sesión en localStorage. main.js espera a cargarSesion antes de montar la aplicación, para que al recargar no se vea un momento la interfaz de "sin sesión".
+- El estado de los formularios (campos, errores, si se está enviando) se queda en cada vista.
+
+### Rutas
+
+- / → InicioView
+- /login → LoginView. Si ya hay sesión, el guard beforeEnter lleva a /.
+
+### Componentes
+
+- App.vue: CabeceraApp encima del RouterView
+- CabeceraApp: nombre, rol y "Cerrar sesión" con sesión; "Iniciar sesión" sin ella
+- LoginView: formulario de login con validación, botón cargando durante el envío y mensaje de error
 
 ## Tablas
 
@@ -66,4 +93,10 @@ Un DJ solo puede enviar una propuesta a cada evento. Si se borra el evento, se b
 - src/supabaseClient.js: cliente de Supabase configurado desde `.env`
 - supabase/migrations: scripts SQL de tablas, triggers y políticas RLS
 - tests: pruebas automatizadas con Vitest
-- frontend: por determinar
+- scripts/crear-usuarios-prueba.js: crea los usuarios de prueba fijos
+- frontend-vue: frontend en Vue
+  - src/services y src/supabaseClient.js: copia de la capa de servicios con el cliente para el navegador
+  - src/stores: stores de Pinia
+  - src/router: rutas
+  - src/views y src/components: vistas y componentes
+  - tests: tests del frontend

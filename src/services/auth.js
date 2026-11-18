@@ -23,7 +23,11 @@ export async function registrar({ email, password, nombre, rol, ciudad }) {
  */
 export async function login(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-  if (error) throw new Error('Email o contraseña incorrectos')
+  if (error) {
+    // Si no llega respuesta del servidor, Supabase devuelve un AuthRetryableFetchError
+    if (error.name === 'AuthRetryableFetchError') throw new Error('No se ha podido conectar con el servidor')
+    throw new Error('Email o contraseña incorrectos')
+  }
   return data.user
 }
 

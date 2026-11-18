@@ -1,0 +1,71 @@
+<script setup>
+import { useRouter } from 'vue-router'
+import Button from 'primevue/button'
+import Tag from 'primevue/tag'
+import { useSesionStore } from '@/stores/sesion.js'
+
+const sesion = useSesionStore()
+const router = useRouter()
+
+async function cerrarSesion() {
+  await sesion.logout()
+  router.push({ name: 'inicio' })
+}
+</script>
+
+<template>
+  <header class="cabecera">
+    <RouterLink to="/" class="marca">CueBooking</RouterLink>
+
+    <div v-if="sesion.haySesion" class="usuario">
+      <span class="nombre" data-test="nombre">{{ sesion.perfil?.nombre }}</span>
+      <Tag :value="sesion.rolTexto" data-test="rol" />
+      <Button
+        label="Cerrar sesión"
+        icon="pi pi-sign-out"
+        severity="secondary"
+        size="small"
+        data-test="logout"
+        @click="cerrarSesion"
+      />
+    </div>
+    <Button
+      v-else
+      as="router-link"
+      to="/login"
+      label="Iniciar sesión"
+      icon="pi pi-sign-in"
+      size="small"
+      data-test="ir-login"
+    />
+  </header>
+</template>
+
+<style scoped>
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.marca {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nombre {
+  font-weight: 600;
+}
+</style>
