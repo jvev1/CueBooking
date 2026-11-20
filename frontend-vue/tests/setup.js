@@ -4,3 +4,5 @@ import { vi } from 'vitest'
 // Los tests que necesitan simular respuestas del cliente (auth.test.js) lo vuelven a sustituir,
 // y el resto sustituye directamente los servicios.
 vi.mock('@backend/supabaseClient.js', () => ({ supabase: {} }))
+
+window.scrollTo = vi.fn()

@@ -24,8 +24,9 @@ watch(paginaUrl, (pagina) => store.cargarPagina(pagina), { immediate: true })
 // Hay eventos, pero la página pedida está más allá de la última
 const paginaNoExiste = computed(() => store.total > 0 && store.eventos.length === 0)
 
-function irAPagina(pagina) {
-  router.push({ name: 'eventos', query: { pagina } })
+async function irAPagina(pagina) {
+  await router.push({ name: 'eventos', query: { pagina } })
+  window.scrollTo({ top: 0 })
 }
 </script>
 
