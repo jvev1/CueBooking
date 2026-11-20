@@ -15,15 +15,17 @@
 
 ### Acceso al backend
 
-- Los servicios auth.js, perfiles.js y validacion.js se copian en frontend-vue/src/services. Se copian en lugar de importarlos del backend porque src/supabaseClient.js usa dotenv y process.env, que no existen en el navegador.
-- frontend-vue/src/supabaseClient.js crea el cliente con VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY (import.meta.env). Los servicios solo importan `../supabaseClient.js`, así que funcionan sin cambios.
+- El frontend usa directamente la capa de servicios de la práctica 1 (src/services), con el alias `@backend` de vite.config.js (por ejemplo, `@backend/services/eventos.js`). En la iteración 05 se copiaban en frontend-vue/src/services; en la 06 se dejó de copiar porque el frontend está en el mismo repositorio y con las copias cada cambio había que hacerlo dos veces.
+- src/supabaseClient.js lo comparten el backend y el frontend: lee las variables de import.meta.env (VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY) en el navegador y de process.env (SUPABASE_URL y SUPABASE_ANON_KEY) en Node. Ya no importa dotenv: en los tests del backend el .env se carga con setupFiles y en el script de usuarios de prueba con `node --env-file=.env`.
+- vite.config.js permite servir ../src (`server.fs.allow`) y usa la copia de @supabase/supabase-js de frontend-vue (`resolve.dedupe`).
 - Los componentes y los stores solo usan los servicios, nunca Supabase directamente.
-- login distingue las credenciales incorrectas ("Email o contraseña incorrectos") de un fallo de conexión ("No se ha podido conectar con el servidor"). El cambio se hizo en las dos copias de auth.js.
-- validacion.js del frontend añade validarLogin, que devuelve los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo del formulario.
+- login distingue las credenciales incorrectas ("Email o contraseña incorrectos") de un fallo de conexión ("No se ha podido conectar con el servidor").
+- validacion.js tiene validarLogin para el formulario de login: devuelve los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo.
 
 ### Estado compartido
 
 - Store `sesion` (stores/sesion.js): usuario de Supabase Auth y su perfil (nombre y rol). Getters haySesion y rolTexto. Acciones cargarSesion, login y logout.
+- Store `eventos` (stores/eventos.js): eventos de la página cargada, total, página, tamaño (10), si se está cargando y el error. Getter totalPaginas. La acción cargarPagina llama a buscarEventos, que pagina en el servidor; si llegan respuestas desordenadas, solo se guarda la de la última petición.
 - Supabase guarda la sesión en localStorage. main.js espera a cargarSesion antes de montar la aplicación, para que al recargar no se vea un momento la interfaz de "sin sesión".
 - El estado de los formularios (campos, errores, si se está enviando) se queda en cada vista.
 
@@ -31,12 +33,16 @@
 
 - / → InicioView
 - /login → LoginView. Si ya hay sesión, el guard beforeEnter lleva a /.
+- /eventos → EventosView, pública. La página va en la query (?pagina=2): la vista la lee de la URL y carga esa página cada vez que cambia, así que funcionan los enlaces directos y atrás/adelante. Si no es un entero mayor que 0, se usa la 1.
 
 ### Componentes
 
 - App.vue: CabeceraApp encima del RouterView
-- CabeceraApp: nombre, rol y "Cerrar sesión" con sesión; "Iniciar sesión" sin ella
+- CabeceraApp: enlace "Eventos"; nombre, rol y "Cerrar sesión" con sesión; "Iniciar sesión" sin ella
 - LoginView: formulario de login con validación, botón cargando durante el envío y mensaje de error
+- EventosView: listado de eventos con sus estados (cargando, error con "Reintentar", listado vacío y página que no existe)
+- TarjetaEvento: título, fecha, ciudad, género y estado de un evento
+- PaginacionEventos: botones "Anterior" y "Siguiente", página actual, total de páginas y total de eventos
 
 ## Tablas
 
@@ -90,12 +96,12 @@ Un DJ solo puede enviar una propuesta a cada evento. Si se borra el evento, se b
 ## Estructura de carpetas
 
 - src/services: capa de servicios (acceso al backend)
-- src/supabaseClient.js: cliente de Supabase configurado desde `.env`
+- src/supabaseClient.js: cliente de Supabase, compartido por el backend (process.env) y el frontend (import.meta.env)
 - supabase/migrations: scripts SQL de tablas, triggers y políticas RLS
 - tests: pruebas automatizadas con Vitest
 - scripts/crear-usuarios-prueba.js: crea los usuarios de prueba fijos
 - frontend-vue: frontend en Vue
-  - src/services y src/supabaseClient.js: copia de la capa de servicios con el cliente para el navegador
+  - src/utils: funciones de formato
   - src/stores: stores de Pinia
   - src/router: rutas
   - src/views y src/components: vistas y componentes

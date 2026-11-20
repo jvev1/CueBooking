@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 
-vi.mock('@/services/auth.js', () => ({ login: vi.fn(), logout: vi.fn(), usuarioActual: vi.fn() }))
-vi.mock('@/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
+vi.mock('@backend/services/auth.js', () => ({ login: vi.fn(), logout: vi.fn(), usuarioActual: vi.fn() }))
+vi.mock('@backend/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
 
-import * as auth from '@/services/auth.js'
+import * as auth from '@backend/services/auth.js'
 import CabeceraApp from '@/components/CabeceraApp.vue'
 import { useSesionStore } from '@/stores/sesion.js'
 import { montar } from './montar.js'
@@ -26,6 +26,23 @@ describe('CabeceraApp', () => {
     expect(wrapper.find('[data-test="ir-login"]').text()).toContain('Iniciar sesión')
     expect(wrapper.find('[data-test="nombre"]').exists()).toBe(false)
     expect(wrapper.find('[data-test="rol"]').exists()).toBe(false)
+  })
+
+  it('muestra el enlace "Eventos" con y sin sesión', async () => {
+    const sinSesion = await montar(CabeceraApp)
+    expect(sinSesion.wrapper.find('[data-test="enlace-eventos"]').text()).toBe('Eventos')
+
+    const conSesionDj = await montar(CabeceraApp, { prepararSesion: conSesion('dj', 'DJ Prueba') })
+    expect(conSesionDj.wrapper.find('[data-test="enlace-eventos"]').text()).toBe('Eventos')
+  })
+
+  it('el enlace "Eventos" va a /eventos', async () => {
+    const { wrapper, router } = await montar(CabeceraApp)
+
+    await wrapper.find('[data-test="enlace-eventos"]').trigger('click')
+    await flushPromises()
+
+    expect(router.currentRoute.value.path).toBe('/eventos')
   })
 
   it('con sesión de organizador muestra el nombre, "Organizador" y "Cerrar sesión"', async () => {

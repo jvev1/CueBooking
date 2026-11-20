@@ -45,7 +45,7 @@ frontend-vue/          Frontend en Vue
 Se crean con:
 
 ```bash
-node scripts/crear-usuarios-prueba.js
+node --env-file=.env scripts/crear-usuarios-prueba.js
 ```
 
 Si ya existen, el script solo comprueba que se puede iniciar sesión con ellos.
@@ -75,6 +75,8 @@ Si ya existen, el script solo comprueba que se puede iniciar sesión con ellos.
    ```bash
    npm test
    ```
+
+El frontend usa la capa de servicios de `src/services` (alias `@backend`), así que necesita la carpeta `src` de la raíz, pero no su `node_modules`.
 
 ## Autor
 
