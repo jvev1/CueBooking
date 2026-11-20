@@ -98,6 +98,11 @@ Que cualquier usuario, con o sin sesión, pueda ver el listado de eventos y reco
 - Tipo: modelo en la nube
 
 ### Uso realizado
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN)
+- ayuda con el código: usar la capa de servicios del backend desde el frontend (cliente de Supabase para Node y navegador, alias @backend), store de eventos, ruta /eventos, EventosView, TarjetaEvento, PaginacionEventos y funciones de formato
+- ayuda con los tests del frontend (store, formato, listado, paginación y cabecera)
+- ayuda con la actualización de ARCHITECTURE.md y README.md
+- entender decisiones de la IA (por qué se copiaban los servicios en la iteración 05 y si se podía evitar, y dónde poner validarLogin)
 
 ### Prompt importante 1
 Lee la SPEC de `docs/iteraciones-prac4/06-listado-eventos.md` y el código actual (backend en `src/`, frontend en `frontend-vue/`). Propón un PLAN de 5-6 pasos numerados con el mismo formato que el de la iteración 05: archivos a crear o cambiar, store, rutas, componentes y tests. Usa los servicios existentes (buscarEventos pagina en el servidor) y señala los casos difíciles de la SPEC, como la página en la URL o las respuestas que llegan desordenadas. No escribas código todavía.
