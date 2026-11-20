@@ -60,34 +60,34 @@ Que cualquier usuario, con o sin sesión, pueda ver el listado de eventos y reco
 
 | Caso | Resultado esperado | Resultado |
 |---|---|---|
-| Tests del backend después de cambiar supabaseClient.js | Todos pasan | |
-| Tests de la iteración 05 después de usar los servicios del backend | Todos pasan | |
-| Cargar la página 1 en el store | Guarda los eventos, el total y la página, y deja de estar cargando | |
-| Mientras se carga una página en el store | Está cargando | |
-| Falla la carga en el store | "No se han podido cargar los eventos" y no está cargando | |
-| Calcular el total de páginas con 25 eventos | 3 páginas | |
-| Llegan dos respuestas desordenadas | Se guarda la de la última petición | |
-| Formatear una fecha | dd/mm/aaaa hh:mm | |
-| Nombre de cada estado | Abierto, Cerrado y Completado | |
-| Cabecera con y sin sesión | Enlace "Eventos" | |
-| Pulsar el enlace "Eventos" | Va a /eventos | |
-| Abrir /eventos sin sesión | Se muestra el listado | |
-| Datos de cada evento | Título, fecha, ciudad, género y estado | |
-| Evento sin género | No se muestra el género | |
-| Mientras se cargan los eventos | Indicador de carga y no se muestra el listado | |
-| Listado vacío | "Todavía no hay eventos publicados" | |
-| Falla la carga del listado | "No se han podido cargar los eventos" y botón "Reintentar", sin el mensaje de listado vacío | |
-| Pulsar "Reintentar" | Vuelve a pedir la misma página | |
-| Paginación en la página 2 de 3 | Página actual, total de páginas y total de eventos | |
-| Primera página | "Anterior" desactivado | |
-| Última página | "Siguiente" desactivado | |
-| Solo una página | No se muestran los botones | |
-| Pulsar "Siguiente" en la página 1 | Va a /eventos?pagina=2 y pide la página 2 | |
-| Entrar en /eventos?pagina=2 | Pide la página 2 | |
-| Volver atrás después de pasar a la página 2 | Vuelve a la página 1 | |
-| Entrar en /eventos?pagina=0 o /eventos?pagina=abc | Pide la página 1 | |
-| Entrar en una página mayor que la última | "Esta página no existe" y botón para ir a la primera página | |
-| Pulsar el botón para ir a la primera página | Va a /eventos?pagina=1 | |
+| Tests del backend después de cambiar supabaseClient.js | Todos pasan | OK |
+| Tests de la iteración 05 después de usar los servicios del backend | Todos pasan | OK |
+| Cargar la página 1 en el store | Guarda los eventos, el total y la página, y deja de estar cargando | OK |
+| Mientras se carga una página en el store | Está cargando | OK |
+| Falla la carga en el store | "No se han podido cargar los eventos" y no está cargando | OK |
+| Calcular el total de páginas con 25 eventos | 3 páginas | OK |
+| Llegan dos respuestas desordenadas | Se guarda la de la última petición | OK |
+| Formatear una fecha | dd/mm/aaaa hh:mm | OK |
+| Nombre de cada estado | Abierto, Cerrado y Completado | OK |
+| Cabecera con y sin sesión | Enlace "Eventos" | OK |
+| Pulsar el enlace "Eventos" | Va a /eventos | OK |
+| Abrir /eventos sin sesión | Se muestra el listado | OK |
+| Datos de cada evento | Título, fecha, ciudad, género y estado | OK |
+| Evento sin género | No se muestra el género | OK |
+| Mientras se cargan los eventos | Indicador de carga y no se muestra el listado | OK |
+| Listado vacío | "Todavía no hay eventos publicados" | OK |
+| Falla la carga del listado | "No se han podido cargar los eventos" y botón "Reintentar", sin el mensaje de listado vacío | OK |
+| Pulsar "Reintentar" | Vuelve a pedir la misma página | OK |
+| Paginación en la página 2 de 3 | Página actual, total de páginas y total de eventos | OK |
+| Primera página | "Anterior" desactivado | OK |
+| Última página | "Siguiente" desactivado | OK |
+| Solo una página | No se muestran los botones | OK |
+| Pulsar "Siguiente" en la página 1 | Va a /eventos?pagina=2 y pide la página 2 | OK |
+| Entrar en /eventos?pagina=2 | Pide la página 2 | OK |
+| Volver atrás después de pasar a la página 2 | Vuelve a la página 1 | OK |
+| Entrar en /eventos?pagina=0 o /eventos?pagina=abc | Pide la página 1 | OK |
+| Entrar en una página mayor que la última | "Esta página no existe" y botón para ir a la primera página | OK |
+| Pulsar el botón para ir a la primera página | Va a /eventos?pagina=1 | OK |
 
 ## AI_LOG
 
@@ -100,10 +100,24 @@ Que cualquier usuario, con o sin sesión, pueda ver el listado de eventos y reco
 ### Uso realizado
 
 ### Prompt importante 1
+Lee la SPEC de `docs/iteraciones-prac4/06-listado-eventos.md` y el código actual (backend en `src/`, frontend en `frontend-vue/`). Propón un PLAN de 5-6 pasos numerados con el mismo formato que el de la iteración 05: archivos a crear o cambiar, store, rutas, componentes y tests. Usa los servicios existentes (buscarEventos pagina en el servidor) y señala los casos difíciles de la SPEC, como la página en la URL o las respuestas que llegan desordenadas. No escribas código todavía.
+
+### Prompt importante 2
+
+Ejecuta la iteración 06: lee la SPEC, el PLAN y el TEST_PLAN de docs/iteraciones-prac4/06-listado-eventos.md e implementa el PLAN paso a paso. Haz solo lo que piden, respeta el estilo del código existente y no hagas commits. Al terminar, dime qué hiciste fuera del PLAN.
 
 ### Decisión del estudiante:
+- Aceptar que con una sola página se muestre la información y solo se oculten los botones.
 
 ### Correcciones manuales
 - La IA proponía en el paso 1 del PLAN copiar eventos.js y propuestas.js en el frontend. Lo cambié para usar directamente la capa de servicios de la práctica 1.
+- Al cambiar de página con los botones, la vista se quedaba en la parte de abajo. Ahora vuelve arriba para que se vea el inicio del listado.
 
 ## COMMITS RELACIONADOS
+d761d1186973473bd5dbaed609bc6c81ef3d8ba4 - spec it06
+d3b31b4dd1304e74e9cb518c57bcc9d365fc85d8 - plan it06
+4229c465c56d66fa7fb0b33f3409c22a6e40eaa1 - test plan
+74b03a4b0d2791e0c003b53614bf0b30f3557a32 - usar servicios del backend en el frontend
+20d87d4f36511925e4a60f903f8c9d557d1119fe - listado de eventos
+f5eb4ce95d143e760579a81c1eeb5d83ec0711d4 - tests y documentacion it6
+b08cf43187a1d29f23aba4e3618111adba799f8c - scroll al cambiar de pagina
