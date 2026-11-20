@@ -6,7 +6,7 @@ import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Message from 'primevue/message'
 import { useSesionStore } from '@/stores/sesion.js'
-import { validarLogin } from '@/services/validacion.js'
+import { validarLogin } from '@backend/services/validacion.js'
 
 const sesion = useSesionStore()
 const router = useRouter()

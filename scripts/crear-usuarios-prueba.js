@@ -1,5 +1,5 @@
 // Crea los usuarios de prueba fijos que se usan para probar el frontend.
-// Uso (desde la raíz del repositorio, con el .env configurado): node scripts/crear-usuarios-prueba.js
+// Uso (desde la raíz del repositorio, con el .env configurado): node --env-file=.env scripts/crear-usuarios-prueba.js
 // Si un usuario ya existe, se comprueba que se puede iniciar sesión con él.
 import { registrar, login, logout } from '../src/services/auth.js'
 

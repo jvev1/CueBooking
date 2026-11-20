@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 
-vi.mock('@/services/auth.js', () => ({
+vi.mock('@backend/services/auth.js', () => ({
   login: vi.fn(),
   logout: vi.fn(),
   usuarioActual: vi.fn()
 }))
-vi.mock('@/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
+vi.mock('@backend/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
 
-import * as auth from '@/services/auth.js'
-import { obtenerPerfil } from '@/services/perfiles.js'
+import * as auth from '@backend/services/auth.js'
+import { obtenerPerfil } from '@backend/services/perfiles.js'
 import { useSesionStore } from '@/stores/sesion.js'
 
 const USUARIO = { id: 'u1', email: 'org@gmail.com' }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import * as auth from '@/services/auth.js'
-import { obtenerPerfil } from '@/services/perfiles.js'
+import * as auth from '@backend/services/auth.js'
+import { obtenerPerfil } from '@backend/services/perfiles.js'
 
 const NOMBRES_ROL = { organizador: 'Organizador', dj: 'DJ' }
 

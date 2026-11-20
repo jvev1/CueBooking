@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
-vi.mock('@/services/auth.js', () => ({ login: vi.fn(), logout: vi.fn(), usuarioActual: vi.fn() }))
-vi.mock('@/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
+vi.mock('@backend/services/auth.js', () => ({ login: vi.fn(), logout: vi.fn(), usuarioActual: vi.fn() }))
+vi.mock('@backend/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
 
 import { routes } from '@/router/index.js'
 import { useSesionStore } from '@/stores/sesion.js'

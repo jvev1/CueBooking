@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Se sustituye el cliente de Supabase para simular sus respuestas sin backend
-vi.mock('@/supabaseClient.js', () => ({
+vi.mock('@backend/supabaseClient.js', () => ({
   supabase: { auth: { signInWithPassword: vi.fn() } }
 }))
 
-import { supabase } from '@/supabaseClient.js'
-import { login } from '@/services/auth.js'
+import { supabase } from '@backend/supabaseClient.js'
+import { login } from '@backend/services/auth.js'
 
 describe('login', () => {
   beforeEach(() => vi.clearAllMocks())

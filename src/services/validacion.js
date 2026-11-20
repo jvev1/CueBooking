@@ -175,3 +175,17 @@ export function validarPropuesta(datos) {
 
   textoOpcional(descripcion, 'La descripción', 1000)
 }
+
+/**
+ * Validación del formulario de login. A diferencia del resto, no lanza un error:
+ * devuelve un objeto con el error de cada campo (vacío si todo es correcto)
+ * para mostrarlo debajo del campo correspondiente.
+ */
+export function validarLogin({ email, password }) {
+  const errores = {}
+  if (!email || !email.trim()) errores.email = 'El email es obligatorio'
+  else if (!EMAIL_REGEX.test(email.trim())) errores.email = 'El email no tiene un formato válido'
+  if (!password) errores.password = 'La contraseña es obligatoria'
+  else if (password.length < 6) errores.password = 'La contraseña debe tener al menos 6 caracteres'
+  return errores
+}

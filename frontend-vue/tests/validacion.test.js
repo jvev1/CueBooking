@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validarLogin } from '@/services/validacion.js'
+import { validarLogin } from '@backend/services/validacion.js'
 
 describe('validarLogin', () => {
   it('con email y contraseña vacíos da error en los dos campos', () => {
