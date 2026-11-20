@@ -15,7 +15,10 @@ async function cerrarSesion() {
 
 <template>
   <header class="cabecera">
-    <RouterLink to="/" class="marca">CueBooking</RouterLink>
+    <nav class="navegacion">
+      <RouterLink to="/" class="marca">CueBooking</RouterLink>
+      <RouterLink to="/eventos" class="enlace" data-test="enlace-eventos">Eventos</RouterLink>
+    </nav>
 
     <div v-if="sesion.haySesion" class="usuario">
       <span class="nombre" data-test="nombre">{{ sesion.perfil?.nombre }}</span>
@@ -57,6 +60,22 @@ async function cerrarSesion() {
   font-size: 1.2rem;
   color: inherit;
   text-decoration: none;
+}
+
+.navegacion {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.enlace {
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.enlace.router-link-active {
+  color: inherit;
+  font-weight: 600;
 }
 
 .usuario {
