@@ -58,6 +58,37 @@ Que cualquier usuario, con o sin sesión, pueda ver el listado de eventos y reco
 
 ## TEST_PLAN
 
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Tests del backend después de cambiar supabaseClient.js | Todos pasan | |
+| Tests de la iteración 05 después de usar los servicios del backend | Todos pasan | |
+| Cargar la página 1 en el store | Guarda los eventos, el total y la página, y deja de estar cargando | |
+| Mientras se carga una página en el store | Está cargando | |
+| Falla la carga en el store | "No se han podido cargar los eventos" y no está cargando | |
+| Calcular el total de páginas con 25 eventos | 3 páginas | |
+| Llegan dos respuestas desordenadas | Se guarda la de la última petición | |
+| Formatear una fecha | dd/mm/aaaa hh:mm | |
+| Nombre de cada estado | Abierto, Cerrado y Completado | |
+| Cabecera con y sin sesión | Enlace "Eventos" | |
+| Pulsar el enlace "Eventos" | Va a /eventos | |
+| Abrir /eventos sin sesión | Se muestra el listado | |
+| Datos de cada evento | Título, fecha, ciudad, género y estado | |
+| Evento sin género | No se muestra el género | |
+| Mientras se cargan los eventos | Indicador de carga y no se muestra el listado | |
+| Listado vacío | "Todavía no hay eventos publicados" | |
+| Falla la carga del listado | "No se han podido cargar los eventos" y botón "Reintentar", sin el mensaje de listado vacío | |
+| Pulsar "Reintentar" | Vuelve a pedir la misma página | |
+| Paginación en la página 2 de 3 | Página actual, total de páginas y total de eventos | |
+| Primera página | "Anterior" desactivado | |
+| Última página | "Siguiente" desactivado | |
+| Solo una página | No se muestran los botones | |
+| Pulsar "Siguiente" en la página 1 | Va a /eventos?pagina=2 y pide la página 2 | |
+| Entrar en /eventos?pagina=2 | Pide la página 2 | |
+| Volver atrás después de pasar a la página 2 | Vuelve a la página 1 | |
+| Entrar en /eventos?pagina=0 o /eventos?pagina=abc | Pide la página 1 | |
+| Entrar en una página mayor que la última | "Esta página no existe" y botón para ir a la primera página | |
+| Pulsar el botón para ir a la primera página | Va a /eventos?pagina=1 | |
+
 ## AI_LOG
 
 ### Herramienta usada
