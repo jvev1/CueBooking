@@ -57,6 +57,38 @@ Poder ver el detalle de un evento y que los organizadores puedan crear eventos y
 
 ## TEST_PLAN
 
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Validar el formulario sin título, fecha ni ciudad | Error en los tres campos | |
+| Validar con una fecha pasada | Error en la fecha | |
+| Validar con presupuesto negativo | Error en el presupuesto | |
+| Validar con datos correctos | Sin errores | |
+| Cargar un evento en el store | Guarda el evento del detalle | |
+| Cargar un evento que no existe | "Evento no encontrado" | |
+| Crear, modificar y eliminar en el store | Llaman al servicio y, al modificar, se actualiza el evento del detalle | |
+| Pulsar un evento del listado | Va a su detalle | |
+| "Nuevo evento" en el listado | Lo ve un organizador y no lo ven un DJ ni un usuario sin sesión | |
+| Detalle sin sesión | Muestra descripción, lugar y presupuesto, sin "Editar" ni "Eliminar" | |
+| Detalle con el organizador del evento | "Editar" y "Eliminar" | |
+| Detalle con otro organizador o un DJ | Sin "Editar" ni "Eliminar" | |
+| Detalle de un evento que no existe | "Evento no encontrado" y enlace al listado | |
+| Entrar en /eventos/nuevo sin sesión | Va a /login | |
+| Entrar en /eventos/nuevo con un DJ | Va a /eventos | |
+| Entrar en /eventos/:id/editar sin sesión | Va a /login | |
+| Entrar en /eventos/:id/editar con un evento de otro | Va al detalle | |
+| Crear con el formulario vacío | Errores debajo de cada campo y no se llama al backend | |
+| Crear un evento correcto | Va al detalle del evento creado | |
+| Mientras se guarda | Botón cargando y desactivado | |
+| El backend devuelve un error al crear | Se muestra su mensaje y se sigue en el formulario | |
+| Abrir la edición | El formulario sale con los datos actuales y el campo de estado | |
+| Cancelar la edición | Vuelve al detalle y no se llama al backend | |
+| Guardar la edición | Vuelve al detalle con los datos nuevos | |
+| Pulsar "Eliminar" | Sale el diálogo de confirmación | |
+| Cancelar el borrado | No se borra y se sigue en el detalle | |
+| Confirmar el borrado | Va al listado | |
+| El backend devuelve un error al borrar | Se muestra su mensaje y se sigue en el detalle | |
+| Recorrido completo con el backend real (`npm run test:real`, organizador de prueba) | Inicia sesión, crea el evento, lo encuentra en el listado, abre el detalle, lo edita, lo elimina (ya no está en el listado) y cierra la sesión | |
+
 ## AI_LOG
 
 ### Herramienta usada
@@ -68,9 +100,13 @@ Poder ver el detalle de un evento y que los organizadores puedan crear eventos y
 ### Uso realizado
 
 ### Prompt importante 1
+Lee la SPEC y el PLAN de `docs/iteraciones-prac4/06-listado-eventos.md` y genera la sección TEST_PLAN con el mismo formato que la de la iteración 05: una tabla con las columnas "Caso | Resultado esperado | Resultado", con la columna Resultado vacía. Incluye un caso por cada requisito de la SPEC y por cada paso del PLAN que se pueda probar (store, vista, componentes, formato y regresión de los tests anteriores), incluidos los casos límite: página de la URL inválida o mayor que la última, listado vacío, error con "Reintentar" y respuestas desordenadas. Frases cortas, sin casos que la SPEC deja fuera de alcance. No escribas código ni tests todavía.
 
 ### Decisión del estudiante:
+- Acepté la tabla de casos que propuso la IA porque cubre todos los requisitos de la SPEC y los pasos del PLAN que se pueden probar.
 
 ### Correcciones manuales
+- Se acepta el uso de un solo formulario para crear y editar. Así las validaciones y los campos no se repiten. El campo de estado solo aparece al editar.
+
 
 ## COMMITS RELACIONADOS
