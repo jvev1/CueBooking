@@ -45,6 +45,8 @@ const fechaSinCambiar = computed(
   () => Boolean(props.inicial?.fecha) && fecha.value?.getTime() === new Date(props.inicial.fecha).getTime()
 )
 
+const ahora = new Date()
+
 const textoOpcional = (valor) => (valor && valor.trim() ? valor.trim() : null)
 
 function enviar() {
@@ -92,6 +94,7 @@ function enviar() {
           show-time
           hour-format="24"
           date-format="dd/mm/yy"
+          :min-date="ahora"
           show-icon
           :invalid="!!errores.fecha"
           fluid
