@@ -1,37 +1,40 @@
 <script setup>
-import { computed } from 'vue'
 import Tag from 'primevue/tag'
-import { formatearFecha, nombreEstado } from '@/utils/formato.js'
+import { formatearFecha, nombreEstado, severidadEstado } from '@/utils/formato.js'
 
-const props = defineProps({
+defineProps({
   evento: { type: Object, required: true }
 })
-
-// Color del Tag según el estado del evento
-const SEVERIDAD_ESTADO = { abierto: 'success', cerrado: 'warn', completado: 'secondary' }
-const severidad = computed(() => SEVERIDAD_ESTADO[props.evento.estado] ?? 'secondary')
 </script>
 
 <template>
-  <article class="tarjeta" data-test="evento">
+  <!-- Toda la tarjeta es un enlace al detalle del evento -->
+  <RouterLink :to="{ name: 'detalle-evento', params: { id: evento.id } }" class="tarjeta" data-test="evento">
     <div class="cabecera-tarjeta">
       <h2 class="titulo" data-test="titulo">{{ evento.titulo }}</h2>
-      <Tag :value="nombreEstado(evento.estado)" :severity="severidad" data-test="estado" />
+      <Tag :value="nombreEstado(evento.estado)" :severity="severidadEstado(evento.estado)" data-test="estado" />
     </div>
     <p class="datos">
       <span data-test="fecha"><i class="pi pi-calendar" /> {{ formatearFecha(evento.fecha) }}</span>
       <span data-test="ciudad"><i class="pi pi-map-marker" /> {{ evento.ciudad }}</span>
       <span v-if="evento.genero" class="genero" data-test="genero"><i class="pi pi-headphones" /> {{ evento.genero }}</span>
     </p>
-  </article>
+  </RouterLink>
 </template>
 
 <style scoped>
 .tarjeta {
+  display: block;
   padding: 1rem 1.25rem;
+  color: inherit;
+  text-decoration: none;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.tarjeta:hover {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
 }
 
 .cabecera-tarjeta {

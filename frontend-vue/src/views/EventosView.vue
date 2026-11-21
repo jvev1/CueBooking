@@ -7,10 +7,12 @@ import ProgressSpinner from 'primevue/progressspinner'
 import TarjetaEvento from '@/components/TarjetaEvento.vue'
 import PaginacionEventos from '@/components/PaginacionEventos.vue'
 import { useEventosStore } from '@/stores/eventos.js'
+import { useSesionStore } from '@/stores/sesion.js'
 
 const route = useRoute()
 const router = useRouter()
 const store = useEventosStore()
+const sesion = useSesionStore()
 
 /** Página de la URL (?pagina=2). Si no es un entero mayor que 0, se usa la 1. */
 const paginaUrl = computed(() => {
@@ -31,7 +33,18 @@ async function irAPagina(pagina) {
 </script>
 
 <template>
-  <h1>Eventos</h1>
+  <div class="cabecera-listado">
+    <h1>Eventos</h1>
+    <!-- Solo los organizadores pueden crear eventos -->
+    <Button
+      v-if="sesion.esOrganizador"
+      as="router-link"
+      :to="{ name: 'nuevo-evento' }"
+      label="Nuevo evento"
+      icon="pi pi-plus"
+      data-test="nuevo-evento"
+    />
+  </div>
 
   <div v-if="store.cargando" class="estado" data-test="cargando">
     <ProgressSpinner style="width: 48px; height: 48px" stroke-width="4" aria-label="Cargando eventos" />
@@ -67,6 +80,13 @@ async function irAPagina(pagina) {
 </template>
 
 <style scoped>
+.cabecera-listado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .estado {
   display: flex;
   flex-direction: column;
