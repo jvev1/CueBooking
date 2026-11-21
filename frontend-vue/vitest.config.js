@@ -7,7 +7,8 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: 'jsdom',
-      exclude: [...configDefaults.exclude, 'e2e/**'],
+      // tests-real usa el backend real y se ejecuta aparte con `npm run test:real`
+      exclude: [...configDefaults.exclude, 'e2e/**', 'tests-real/**'],
       setupFiles: ['./tests/setup.js'],
       root: fileURLToPath(new URL('./', import.meta.url)),
     },
