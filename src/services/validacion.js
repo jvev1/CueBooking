@@ -189,3 +189,26 @@ export function validarLogin({ email, password }) {
   else if (password.length < 6) errores.password = 'La contraseña debe tener al menos 6 caracteres'
   return errores
 }
+
+/**
+ * Validación del formulario de crear y editar eventos, con las mismas reglas que validarEvento.
+ * Como validarLogin, devuelve un objeto con el error de cada campo en vez de lanzar un error.
+ * Al editar, si la fecha no ha cambiado no se exige que sea futura (exigirFechaFutura = false),
+ * para poder cambiar el estado de un evento que ya ha pasado.
+ */
+export function validarFormularioEvento({ titulo, fecha, ciudad, presupuesto }, { exigirFechaFutura = true } = {}) {
+  const errores = {}
+  if (!titulo || !titulo.trim()) errores.titulo = 'El título es obligatorio'
+
+  const valorFecha = fecha ? new Date(fecha) : null
+  if (!valorFecha || Number.isNaN(valorFecha.getTime())) errores.fecha = 'La fecha es obligatoria'
+  else if (exigirFechaFutura && valorFecha <= new Date()) errores.fecha = 'La fecha del evento debe ser futura'
+
+  if (!ciudad || !ciudad.trim()) errores.ciudad = 'La ciudad es obligatoria'
+
+  if (presupuesto !== undefined && presupuesto !== null) {
+    if (typeof presupuesto !== 'number' || Number.isNaN(presupuesto)) errores.presupuesto = 'El presupuesto debe ser un número'
+    else if (presupuesto < 0) errores.presupuesto = 'El presupuesto no puede ser negativo'
+  }
+  return errores
+}

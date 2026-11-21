@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice'
 import Aura from '@primeuix/themes/aura'
 import 'primeicons/primeicons.css'
 
@@ -13,6 +14,8 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, { theme: { preset: Aura } })
+// Para los diálogos de confirmación (ConfirmDialog), por ejemplo al eliminar un evento
+app.use(ConfirmationService)
 
 // Se recupera la sesión antes de montar la aplicación para que, al recargar con la
 // sesión iniciada, no se vea un momento la cabecera de "sin sesión".

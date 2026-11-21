@@ -13,3 +13,18 @@ export function formatearFecha(fecha) {
 export function nombreEstado(estado) {
   return NOMBRES_ESTADO[estado] ?? estado
 }
+
+// Color del Tag de PrimeVue según el estado del evento
+const SEVERIDAD_ESTADO = { abierto: 'success', cerrado: 'warn', completado: 'secondary' }
+
+export function severidadEstado(estado) {
+  return SEVERIDAD_ESTADO[estado] ?? 'secondary'
+}
+
+const FORMATO_EUROS = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
+
+/** Presupuesto en euros (por ejemplo, "1500,00 €"), o "Sin indicar" si no tiene. */
+export function formatearPresupuesto(presupuesto) {
+  if (presupuesto === null || presupuesto === undefined) return 'Sin indicar'
+  return FORMATO_EUROS.format(presupuesto)
+}
