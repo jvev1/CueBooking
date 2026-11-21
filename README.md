@@ -75,6 +75,10 @@ Si ya existen, el script solo comprueba que se puede iniciar sesión con ellos.
    ```bash
    npm test
    ```
+5. Recorrido completo con el backend real (login, crear un evento, buscarlo en el listado, ver el detalle, editarlo, eliminarlo y cerrar la sesión). Necesita el `.env` del frontend y los usuarios de prueba creados; usa el organizador de prueba y borra el evento que crea:
+   ```bash
+   npm run test:real
+   ```
 
 El frontend usa la capa de servicios de `src/services` (alias `@backend`), así que necesita la carpeta `src` de la raíz, pero no su `node_modules`.
 

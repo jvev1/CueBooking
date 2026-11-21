@@ -1,9 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 
-vi.mock('@backend/services/eventos.js', () => ({ buscarEventos: vi.fn() }))
+vi.mock('@backend/services/eventos.js', () => ({
+  buscarEventos: vi.fn(),
+  obtenerEvento: vi.fn(),
+  crearEvento: vi.fn(),
+  modificarEvento: vi.fn(),
+  eliminarEvento: vi.fn()
+}))
 
-import { buscarEventos } from '@backend/services/eventos.js'
+import { buscarEventos, obtenerEvento, crearEvento, modificarEvento, eliminarEvento } from '@backend/services/eventos.js'
 import { useEventosStore } from '@/stores/eventos.js'
 
 const EVENTO = { id: 'e1', titulo: 'Fiesta', fecha: '2027-01-10T22:00:00Z', ciudad: 'Alicante', estado: 'abierto' }
@@ -70,5 +76,55 @@ describe('Store de eventos', () => {
     expect(store.pagina).toBe(2)
     expect(store.eventos[0].id).toBe('e2')
     expect(store.cargando).toBe(false)
+  })
+
+  describe('Detalle', () => {
+    const ID = '11111111-1111-4111-8111-111111111111'
+
+    it('cargar un evento guarda el evento del detalle', async () => {
+      obtenerEvento.mockResolvedValue({ ...EVENTO, id: ID })
+      const store = useEventosStore()
+
+      await store.cargarEvento(ID)
+
+      expect(obtenerEvento).toHaveBeenCalledWith(ID)
+      expect(store.evento.id).toBe(ID)
+      expect(store.errorEvento).toBeNull()
+      expect(store.cargandoEvento).toBe(false)
+    })
+
+    it('cargar un evento que no existe da "Evento no encontrado"', async () => {
+      obtenerEvento.mockRejectedValue(new Error('Evento no encontrado'))
+      const store = useEventosStore()
+
+      await store.cargarEvento(ID)
+      expect(store.errorEvento).toBe('Evento no encontrado')
+      expect(store.evento).toBeNull()
+
+      // Un id que no es un uuid tampoco puede existir, y no se llega a pedir
+      obtenerEvento.mockClear()
+      await store.cargarEvento('no-es-un-id')
+      expect(store.errorEvento).toBe('Evento no encontrado')
+      expect(obtenerEvento).not.toHaveBeenCalled()
+    })
+
+    it('crear, modificar y eliminar llaman al servicio y al modificar se actualiza el detalle', async () => {
+      const store = useEventosStore()
+      store.evento = { ...EVENTO, id: ID }
+
+      crearEvento.mockResolvedValue({ ...EVENTO, id: 'nuevo' })
+      expect((await store.crearEvento({ titulo: 'Nuevo' })).id).toBe('nuevo')
+      expect(crearEvento).toHaveBeenCalledWith({ titulo: 'Nuevo' })
+
+      modificarEvento.mockResolvedValue({ ...EVENTO, id: ID, titulo: 'Cambiado' })
+      await store.modificarEvento(ID, { titulo: 'Cambiado' })
+      expect(modificarEvento).toHaveBeenCalledWith(ID, { titulo: 'Cambiado' })
+      expect(store.evento.titulo).toBe('Cambiado')
+
+      eliminarEvento.mockResolvedValue()
+      await store.eliminarEvento(ID)
+      expect(eliminarEvento).toHaveBeenCalledWith(ID)
+      expect(store.evento).toBeNull()
+    })
   })
 })

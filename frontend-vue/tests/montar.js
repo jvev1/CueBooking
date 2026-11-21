@@ -4,6 +4,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice'
 import { routes } from '@/router/index.js'
 
 export async function montar(componente, { rutaInicial = '/', prepararSesion } = {}) {
@@ -16,7 +17,9 @@ export async function montar(componente, { rutaInicial = '/', prepararSesion } =
   await router.isReady()
 
   const wrapper = mount(componente, {
-    global: { plugins: [pinia, router, [PrimeVue, { unstyled: true }]] }
+    // attachTo: los diálogos de PrimeVue se dibujan en document.body
+    attachTo: document.body,
+    global: { plugins: [pinia, router, [PrimeVue, { unstyled: true }], ConfirmationService] }
   })
   await flushPromises()
   return { wrapper, router }

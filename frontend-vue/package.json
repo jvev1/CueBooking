@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:real": "vitest run --config vitest.real.config.js"
   },
   "dependencies": {
     "@primeuix/themes": "^3.1.1",
