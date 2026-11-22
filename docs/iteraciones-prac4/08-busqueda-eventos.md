@@ -40,6 +40,30 @@ Poder buscar eventos por ciudad, género y fechas desde el listado, y recorrer l
 
 ## TEST_PLAN
 
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Validar la búsqueda con "desde" posterior a "hasta" | Error en las fechas | |
+| Validar la búsqueda con fechas correctas o vacías | Sin errores | |
+| Cargar una página con filtros en el store | Llama a buscarEventos con los filtros, la página y el tamaño | |
+| Fechas de la búsqueda | Se envían el principio del día "desde" y el final del día "hasta" | |
+| Abrir /eventos sin filtros | Se ve el formulario vacío y el listado completo | |
+| Buscar por ciudad | Pide los eventos de esa ciudad y la URL lleva ?ciudad=... y la página 1 | |
+| Buscar combinando ciudad, género y fechas | Pide los eventos con todos los filtros | |
+| Buscar con filtros vacíos | No se envían | |
+| Buscar con "desde" posterior a "hasta" | Error debajo de las fechas y no se busca | |
+| Buscar estando en la página 3 | Vuelve a la página 1 | |
+| Total y paginación de una búsqueda | El total es el de la búsqueda | |
+| Pasar de página en una búsqueda | La URL mantiene los filtros y pide la página siguiente con ellos | |
+| Entrar directamente en una URL con filtros | El formulario sale relleno y se piden los eventos con esos filtros | |
+| Volver atrás después de buscar | Vuelve a la búsqueda anterior | |
+| Filtros no válidos en la URL (género que no existe, fecha mal escrita) | Se ignoran | |
+| Búsqueda sin resultados | "No hay eventos que coincidan con la búsqueda" y "Quitar filtros" | |
+| Sin filtros y sin eventos | "Todavía no hay eventos publicados" | |
+| Pulsar "Quitar filtros" | Vacía el formulario y vuelve al listado completo | |
+| Mientras se busca | Indicador de carga | |
+| Falla la búsqueda | "No se han podido cargar los eventos" y "Reintentar", que repite la misma búsqueda | |
+| Tests de las iteraciones anteriores | Todos pasan | |
+
 ## AI_LOG
 
 ### Herramienta usada
