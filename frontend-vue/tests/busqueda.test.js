@@ -207,6 +207,15 @@ describe('Búsqueda de eventos', () => {
 
       expect(ultimaBusqueda()).toEqual({ ciudad: 'Alicante', pagina: 1, tamano: 10 })
     })
+
+    it('una fecha que no existe en la URL (?desde=2027-02-31) se ignora', async () => {
+      conResultados(3)
+      const { wrapper } = await montar(EventosView, { rutaInicial: '/eventos?desde=2027-02-31' })
+
+      // Tiene el formato aaaa-mm-dd, pero el 31 de febrero no existe: no se toma como el 3 de marzo
+      expect(ultimaBusqueda()).toEqual({ pagina: 1, tamano: 10 })
+      expect(wrapper.findAllComponents(DatePicker)[0].props('modelValue')).toBeNull()
+    })
   })
 
   describe('Mensajes', () => {

@@ -87,7 +87,16 @@ function quitarFiltros() {
 
     <div class="campo">
       <label for="busqueda-desde">Desde</label>
-      <DatePicker v-model="desde" input-id="busqueda-desde" date-format="dd/mm/yy" show-icon fluid data-test="busqueda-desde" />
+      <!-- En el calendario, "desde" no puede ser posterior a "hasta" -->
+      <DatePicker
+        v-model="desde"
+        input-id="busqueda-desde"
+        date-format="dd/mm/yy"
+        :max-date="hasta ?? undefined"
+        show-icon
+        fluid
+        data-test="busqueda-desde"
+      />
     </div>
 
     <div class="campo">
@@ -96,6 +105,7 @@ function quitarFiltros() {
         v-model="hasta"
         input-id="busqueda-hasta"
         date-format="dd/mm/yy"
+        :min-date="desde ?? undefined"
         show-icon
         :invalid="!!errores.hasta"
         fluid

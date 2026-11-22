@@ -42,27 +42,27 @@ Poder buscar eventos por ciudad, género y fechas desde el listado, y recorrer l
 
 | Caso | Resultado esperado | Resultado |
 |---|---|---|
-| Validar la búsqueda con "desde" posterior a "hasta" | Error en las fechas | |
-| Validar la búsqueda con fechas correctas o vacías | Sin errores | |
-| Cargar una página con filtros en el store | Llama a buscarEventos con los filtros, la página y el tamaño | |
-| Fechas de la búsqueda | Se envían el principio del día "desde" y el final del día "hasta" | |
-| Abrir /eventos sin filtros | Se ve el formulario vacío y el listado completo | |
-| Buscar por ciudad | Pide los eventos de esa ciudad y la URL lleva ?ciudad=... y la página 1 | |
-| Buscar combinando ciudad, género y fechas | Pide los eventos con todos los filtros | |
-| Buscar con filtros vacíos | No se envían | |
-| Buscar con "desde" posterior a "hasta" | Error debajo de las fechas y no se busca | |
-| Buscar estando en la página 3 | Vuelve a la página 1 | |
-| Total y paginación de una búsqueda | El total es el de la búsqueda | |
-| Pasar de página en una búsqueda | La URL mantiene los filtros y pide la página siguiente con ellos | |
-| Entrar directamente en una URL con filtros | El formulario sale relleno y se piden los eventos con esos filtros | |
-| Volver atrás después de buscar | Vuelve a la búsqueda anterior | |
-| Filtros no válidos en la URL (género que no existe, fecha mal escrita) | Se ignoran | |
-| Búsqueda sin resultados | "No hay eventos que coincidan con la búsqueda" y "Quitar filtros" | |
-| Sin filtros y sin eventos | "Todavía no hay eventos publicados" | |
-| Pulsar "Quitar filtros" | Vacía el formulario y vuelve al listado completo | |
-| Mientras se busca | Indicador de carga | |
-| Falla la búsqueda | "No se han podido cargar los eventos" y "Reintentar", que repite la misma búsqueda | |
-| Tests de las iteraciones anteriores | Todos pasan | |
+| Validar la búsqueda con "desde" posterior a "hasta" | Error en las fechas | OK |
+| Validar la búsqueda con fechas correctas o vacías | Sin errores | OK |
+| Cargar una página con filtros en el store | Llama a buscarEventos con los filtros, la página y el tamaño | OK |
+| Fechas de la búsqueda | Se envían el principio del día "desde" y el final del día "hasta" | OK |
+| Abrir /eventos sin filtros | Se ve el formulario vacío y el listado completo | OK |
+| Buscar por ciudad | Pide los eventos de esa ciudad y la URL lleva ?ciudad=... y la página 1 | OK |
+| Buscar combinando ciudad, género y fechas | Pide los eventos con todos los filtros | OK |
+| Buscar con filtros vacíos | No se envían | OK |
+| Buscar con "desde" posterior a "hasta" | Error debajo de las fechas y no se busca | OK |
+| Buscar estando en la página 3 | Vuelve a la página 1 | OK |
+| Total y paginación de una búsqueda | El total es el de la búsqueda | OK |
+| Pasar de página en una búsqueda | La URL mantiene los filtros y pide la página siguiente con ellos | OK |
+| Entrar directamente en una URL con filtros | El formulario sale relleno y se piden los eventos con esos filtros | OK |
+| Volver atrás después de buscar | Vuelve a la búsqueda anterior | OK |
+| Filtros no válidos en la URL (género que no existe, fecha mal escrita) | Se ignoran | OK |
+| Búsqueda sin resultados | "No hay eventos que coincidan con la búsqueda" y "Quitar filtros" | OK |
+| Sin filtros y sin eventos | "Todavía no hay eventos publicados" | OK |
+| Pulsar "Quitar filtros" | Vacía el formulario y vuelve al listado completo | OK |
+| Mientras se busca | Indicador de carga | OK |
+| Falla la búsqueda | "No se han podido cargar los eventos" y "Reintentar", que repite la misma búsqueda | OK |
+| Tests de las iteraciones anteriores | Todos pasan | OK |
 
 ## AI_LOG
 
@@ -74,10 +74,27 @@ Poder buscar eventos por ciudad, género y fechas desde el listado, y recorrer l
 
 ### Uso realizado
 
+Se usó IA para:
+- redactar un borrador de la SPEC, que después revisé
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN)
+- ayuda con el código: filtros en el store de eventos, validarFormularioBusqueda, funciones de los filtros de la URL (utils/busqueda.js), BusquedaEventos y los cambios en EventosView
+- ayuda con los tests de la búsqueda (tests/busqueda.test.js) y con comprobar contra el backend real que buscarEventos acepta los filtros que envía el frontend
+- ayuda con la actualización de ARCHITECTURE.md
+
 ### Prompt importante 1
+Implementa el paso 5 del PLAN de `docs/iteraciones-prac4/08-busqueda-eventos.md`: escribe en `frontend-vue/tests` un test automático por cada caso del TEST_PLAN, con buscarEventos sustituido por un mock y con el mismo estilo que los tests de las iteraciones anteriores (reutiliza `tests/montar.js`). Ejecuta todos los tests del backend y del frontend. Si alguno falla, dime si el error está en el test o en el código, y no cambies el código sin avisarme. No hagas commits.
 
 ### Decisión del estudiante:
+- Acepté que buscarEventos se sustituya por un mock, porque así los tests comprueban qué filtros se envían sin depender de los eventos que haya en Supabase.
 
 ### Correcciones manuales
+- El calendario de "hasta" dejaba elegir una fecha anterior a "desde" y el error solo salía al buscar. Añadí min-date en "hasta" y max-date en "desde". La validación al buscar se mantiene para las fechas que llegan por la URL
+-fechaValida detecta fechas como 2027-02-31, pero en el TEST_PLAN solo está el caso de "fecha mal escrita".He añadido en los tests un caso con ?desde=2027-02-31 y comprueba que el filtro se ignora.
 
 ## COMMITS RELACIONADOS
+99bc19a08445f1820531b010b266811e0882d42d - spec it8
+afc18b8f3a7c3e3251aea4ce6b45831e529a1068 - plan it8
+4e8c269ead1c4ce7fe345a2f9d7c66312f1df3ae - test plan
+598729b86fe493702ab6114df7bb0b83eea68ba7 - filtros de busqueda en el store y validacion
+3de3c3499b59ae365c5c04665a07b52085cb50f5 - formulario de busqueda en el listado
+46913246d68d0e0e12dfa24eabc468aee373cbac - tests it8
