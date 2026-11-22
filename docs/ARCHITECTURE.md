@@ -21,13 +21,13 @@
 - vite.config.js permite servir ../src (`server.fs.allow`) y usa la copia de @supabase/supabase-js de frontend-vue (`resolve.dedupe`).
 - Los componentes y los stores solo usan los servicios, nunca Supabase directamente.
 - login distingue las credenciales incorrectas ("Email o contraseña incorrectos") de un fallo de conexión ("No se ha podido conectar con el servidor").
-- validacion.js tiene validarLogin y validarFormularioEvento para los formularios: devuelven los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo. validarFormularioEvento tiene las mismas reglas que validarEvento; al editar, si la fecha no cambia no se exige que sea futura.
+- validacion.js tiene validarLogin, validarFormularioEvento y validarFormularioBusqueda para los formularios: devuelven los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo. validarFormularioEvento tiene las mismas reglas que validarEvento; al editar, si la fecha no cambia no se exige que sea futura.
 - Al editar un evento solo se envían los campos que han cambiado, para poder cambiar el estado de un evento que ya ha pasado sin que el backend vuelva a validar su fecha.
 
 ### Estado compartido
 
 - Store `sesion` (stores/sesion.js): usuario de Supabase Auth y su perfil (nombre y rol). Getters haySesion y rolTexto. Acciones cargarSesion, login y logout.
-- Store `eventos` (stores/eventos.js): eventos de la página cargada, total, página, tamaño (10), si se está cargando y el error. Getter totalPaginas. La acción cargarPagina llama a buscarEventos, que pagina en el servidor; si llegan respuestas desordenadas, solo se guarda la de la última petición.
+- Store `eventos` (stores/eventos.js): eventos de la página cargada, total, página, tamaño (10), si se está cargando y el error. Getter totalPaginas. La acción cargarPagina(pagina, filtros) llama a buscarEventos, que filtra y pagina en el servidor, y guarda los filtros de la búsqueda cargada (getter hayFiltros). Las fechas se envían como el principio del día "desde" y el final del día "hasta"; si llegan respuestas desordenadas, solo se guarda la de la última petición.
   - También guarda el evento del detalle (evento, cargandoEvento y errorEvento) y tiene las acciones cargarEvento, crearEvento, modificarEvento y eliminarEvento. Al modificar se actualiza el evento del detalle; el listado no se toca, porque se vuelve a pedir al entrar en /eventos.
 - Store `sesion` tiene también el getter esOrganizador, que usan el listado y el router.
 - Supabase guarda la sesión en localStorage. main.js espera a cargarSesion antes de montar la aplicación, para que al recargar no se vea un momento la interfaz de "sin sesión".
@@ -38,6 +38,7 @@
 - / → InicioView
 - /login → LoginView. Si ya hay sesión, el guard beforeEnter lleva a /.
 - /eventos → EventosView, pública. La página va en la query (?pagina=2): la vista la lee de la URL y carga esa página cada vez que cambia, así que funcionan los enlaces directos y atrás/adelante. Si no es un entero mayor que 0, se usa la 1.
+  - Los filtros de búsqueda también van en la query (?ciudad=Alicante&genero=techno&desde=2027-01-01&hasta=2027-01-31), con las fechas en aaaa-mm-dd. Los que no son válidos se ignoran (utils/busqueda.js). Una búsqueda nueva empieza en la página 1 y los botones de página mantienen los filtros.
 - /eventos/nuevo → NuevoEventoView. Guard: sin sesión va a /login y si no es organizador va a /eventos. Va antes que /eventos/:id.
 - /eventos/:id → DetalleEventoView, pública
 - /eventos/:id/editar → EditarEventoView. Guard: sin sesión va a /login; carga el evento y, si no es del usuario, va al detalle.
@@ -51,6 +52,7 @@
 - EventosView: listado de eventos con sus estados (cargando, error con "Reintentar", listado vacío y página que no existe)
 - TarjetaEvento: título, fecha, ciudad, género y estado de un evento
 - PaginacionEventos: botones "Anterior" y "Siguiente", página actual, total de páginas y total de eventos
+- BusquedaEventos: formulario de búsqueda (ciudad, género, desde y hasta) relleno con los filtros de la URL. Emite los filtros no vacíos y EventosView los pone en la URL. Si una búsqueda no tiene resultados, EventosView muestra "No hay eventos que coincidan con la búsqueda" con "Quitar filtros".
 - TarjetaEvento es un enlace al detalle; EventosView tiene el botón "Nuevo evento" para los organizadores
 - DetalleEventoView: datos del evento, "Evento no encontrado", y "Editar" y "Eliminar" solo para su organizador. Eliminar pide confirmación con ConfirmDialog (ConfirmationService registrado en main.js).
 - FormularioEvento: formulario común a crear y editar, con la validación y los errores por campo. Emite "guardar" con los datos; el campo de estado solo sale al editar.
@@ -113,7 +115,7 @@ Un DJ solo puede enviar una propuesta a cada evento. Si se borra el evento, se b
 - tests: pruebas automatizadas con Vitest
 - scripts/crear-usuarios-prueba.js: crea los usuarios de prueba fijos
 - frontend-vue: frontend en Vue
-  - src/utils: funciones de formato
+  - src/utils: funciones de formato y de los filtros de búsqueda
   - src/stores: stores de Pinia
   - src/router: rutas
   - src/views y src/components: vistas y componentes
