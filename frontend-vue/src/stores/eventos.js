@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import * as servicioEventos from '@backend/services/eventos.js'
+import { parametrosDeBusqueda } from '@/utils/busqueda.js'
 
 export const TAMANO_PAGINA = 10
 
@@ -11,8 +12,8 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 let ultimaPeticion = 0
 
 /**
- * Estado compartido de los eventos: la página del listado (con el total y si se está
- * cargando o ha habido un error) y el evento que se ve en el detalle y en la edición.
+ * Estado compartido de los eventos: la página del listado o de la búsqueda (con sus filtros,
+ * el total y si se está cargando o ha habido un error) y el evento del detalle y la edición.
  */
 export const useEventosStore = defineStore('eventos', {
   state: () => ({
@@ -20,6 +21,8 @@ export const useEventosStore = defineStore('eventos', {
     total: 0,
     pagina: 1,
     tamano: TAMANO_PAGINA,
+    // Filtros de la búsqueda cargada (ciudad, genero, desde y hasta, con las fechas en aaaa-mm-dd)
+    filtros: {},
     cargando: false,
     error: null,
 
@@ -29,18 +32,25 @@ export const useEventosStore = defineStore('eventos', {
   }),
 
   getters: {
-    totalPaginas: (state) => Math.ceil(state.total / state.tamano)
+    totalPaginas: (state) => Math.ceil(state.total / state.tamano),
+    hayFiltros: (state) => Object.keys(state.filtros).length > 0
   },
 
   actions: {
-    async cargarPagina(pagina) {
+    /** Carga una página del listado. Con filtros, es una página de la búsqueda (se filtra en el backend). */
+    async cargarPagina(pagina, filtros = {}) {
       const peticion = ++ultimaPeticion
       this.cargando = true
       this.error = null
       this.pagina = pagina
+      this.filtros = filtros
 
       try {
-        const resultado = await servicioEventos.buscarEventos({ pagina, tamano: this.tamano })
+        const resultado = await servicioEventos.buscarEventos({
+          ...parametrosDeBusqueda(filtros),
+          pagina,
+          tamano: this.tamano
+        })
         if (peticion !== ultimaPeticion) return
         this.eventos = resultado.datos
         this.total = resultado.total

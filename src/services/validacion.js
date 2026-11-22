@@ -212,3 +212,16 @@ export function validarFormularioEvento({ titulo, fecha, ciudad, presupuesto }, 
   }
   return errores
 }
+
+/**
+ * Validación del formulario de búsqueda de eventos. Como validarLogin y validarFormularioEvento,
+ * devuelve el error por campo. Las fechas pueden venir vacías; si están las dos, "desde" no puede
+ * ser posterior a "hasta" (la misma regla que validarBusquedaEventos).
+ */
+export function validarFormularioBusqueda({ desde, hasta }) {
+  const errores = {}
+  if (desde && hasta && new Date(desde) > new Date(hasta)) {
+    errores.hasta = 'La fecha "desde" no puede ser posterior a "hasta"'
+  }
+  return errores
+}
