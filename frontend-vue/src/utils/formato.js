@@ -28,3 +28,8 @@ export function formatearPresupuesto(presupuesto) {
   if (presupuesto === null || presupuesto === undefined) return 'Sin indicar'
   return FORMATO_EUROS.format(presupuesto)
 }
+
+/** Duración de una propuesta en minutos (por ejemplo, "90 min"). */
+export function formatearDuracion(minutos) {
+  return `${minutos} min`
+}

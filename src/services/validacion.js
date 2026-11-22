@@ -225,3 +225,22 @@ export function validarFormularioBusqueda({ desde, hasta }) {
   }
   return errores
 }
+
+/**
+ * Validación del formulario de propuestas, con las mismas reglas que validarPropuesta.
+ * Como en los otros formularios, devuelve el error de cada campo en vez de lanzar un error.
+ */
+export function validarFormularioPropuesta({ precio, duracion_minutos, descripcion }) {
+  const errores = {}
+  if (precio === undefined || precio === null) errores.precio = 'El precio es obligatorio'
+  else if (typeof precio !== 'number' || !Number.isFinite(precio)) errores.precio = 'El precio debe ser un número'
+  else if (precio < 0) errores.precio = 'El precio no puede ser negativo'
+
+  if (duracion_minutos === undefined || duracion_minutos === null) errores.duracion_minutos = 'La duración es obligatoria'
+  else if (!Number.isInteger(duracion_minutos) || duracion_minutos < 1 || duracion_minutos > DURACION_MAXIMA) {
+    errores.duracion_minutos = `La duración debe ser un entero entre 1 y ${DURACION_MAXIMA} minutos`
+  }
+
+  if (descripcion && descripcion.length > 1000) errores.descripcion = 'La descripción no puede superar 1000 caracteres'
+  return errores
+}

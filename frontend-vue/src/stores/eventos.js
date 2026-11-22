@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import * as servicioEventos from '@backend/services/eventos.js'
+import * as servicioPropuestas from '@backend/services/propuestas.js'
 import { parametrosDeBusqueda } from '@/utils/busqueda.js'
 
 export const TAMANO_PAGINA = 10
@@ -13,7 +14,8 @@ let ultimaPeticion = 0
 
 /**
  * Estado compartido de los eventos: la página del listado o de la búsqueda (con sus filtros,
- * el total y si se está cargando o ha habido un error) y el evento del detalle y la edición.
+ * el total y si se está cargando o ha habido un error) y el evento del detalle y la edición,
+ * con sus propuestas (evento.propuestas: las que el usuario puede ver según RLS).
  */
 export const useEventosStore = defineStore('eventos', {
   state: () => ({
@@ -95,6 +97,23 @@ export const useEventosStore = defineStore('eventos', {
     async eliminarEvento(id) {
       await servicioEventos.eliminarEvento(id)
       if (this.evento?.id === id) this.evento = null
+    },
+
+    // Las propuestas del detalle se actualizan en evento.propuestas, sin volver a pedir el evento
+
+    async enviarPropuesta(eventoId, datos) {
+      const propuesta = await servicioPropuestas.enviarPropuesta(eventoId, datos)
+      if (this.evento?.id === eventoId) {
+        this.evento = { ...this.evento, propuestas: [...(this.evento.propuestas ?? []), propuesta] }
+      }
+      return propuesta
+    },
+
+    async retirarPropuesta(id) {
+      await servicioPropuestas.retirarPropuesta(id)
+      if (this.evento?.propuestas) {
+        this.evento = { ...this.evento, propuestas: this.evento.propuestas.filter((p) => p.id !== id) }
+      }
     }
   }
 })

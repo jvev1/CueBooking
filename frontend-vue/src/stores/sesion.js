@@ -17,7 +17,8 @@ export const useSesionStore = defineStore('sesion', {
   getters: {
     haySesion: (state) => state.usuario !== null,
     rolTexto: (state) => NOMBRES_ROL[state.perfil?.rol] ?? '',
-    esOrganizador: (state) => state.usuario !== null && state.perfil?.rol === 'organizador'
+    esOrganizador: (state) => state.usuario !== null && state.perfil?.rol === 'organizador',
+    esDj: (state) => state.usuario !== null && state.perfil?.rol === 'dj'
   },
 
   actions: {
