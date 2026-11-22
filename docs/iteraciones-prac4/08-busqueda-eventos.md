@@ -30,6 +30,14 @@ Poder buscar eventos por ciudad, género y fechas desde el listado, y recorrer l
 
 ## PLAN
 
+1. Store `eventos`: cargarPagina(pagina, filtros) pasa los filtros a buscarEventos junto con la página y el tamaño, y guarda los filtros de la búsqueda cargada. Las fechas se envían como el principio del día "desde" y el final del día "hasta", para que entren los eventos de esos días.
+2. Añadir validarFormularioBusqueda al validacion.js del backend, que devuelve el error por campo si "desde" es posterior a "hasta", como validarLogin y validarFormularioEvento.
+3. EventosView lee de la URL los filtros (ciudad, genero, desde y hasta, con las fechas en formato aaaa-mm-dd) además de la página, y vuelve a cargar cuando cambia cualquiera. Los filtros que no son válidos (un género que no está en la lista o una fecha mal escrita) se ignoran, como la página. Los botones de página mantienen los filtros en la URL.
+4. Componentes:
+   - BusquedaEventos: formulario con InputText, Select y dos DatePicker de PrimeVue, relleno con los filtros de la URL. Al buscar emite los filtros no vacíos, y "Quitar filtros" emite una búsqueda vacía.
+   - EventosView: al recibir una búsqueda hace router.push con los filtros y la página 1. Si no hay resultados y hay filtros, muestra "No hay eventos que coincidan con la búsqueda" con "Quitar filtros"; sin filtros sigue saliendo "Todavía no hay eventos publicados".
+5. Tests automáticos en frontend-vue/tests con los servicios sustituidos por mocks. Actualizar ARCHITECTURE.md.
+
 ## TEST_PLAN
 
 ## AI_LOG
