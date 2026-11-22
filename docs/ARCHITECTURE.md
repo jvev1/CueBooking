@@ -21,7 +21,7 @@
 - vite.config.js permite servir ../src (`server.fs.allow`) y usa la copia de @supabase/supabase-js de frontend-vue (`resolve.dedupe`).
 - Los componentes y los stores solo usan los servicios, nunca Supabase directamente.
 - login distingue las credenciales incorrectas ("Email o contraseña incorrectos") de un fallo de conexión ("No se ha podido conectar con el servidor").
-- validacion.js tiene validarLogin, validarFormularioEvento y validarFormularioBusqueda para los formularios: devuelven los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo. validarFormularioEvento tiene las mismas reglas que validarEvento; al editar, si la fecha no cambia no se exige que sea futura.
+- validacion.js tiene validarLogin, validarFormularioEvento, validarFormularioBusqueda y validarFormularioPropuesta para los formularios: devuelven los errores por campo en vez de lanzar una excepción, para mostrarlos debajo de cada campo. validarFormularioEvento tiene las mismas reglas que validarEvento; al editar, si la fecha no cambia no se exige que sea futura.
 - Al editar un evento solo se envían los campos que han cambiado, para poder cambiar el estado de un evento que ya ha pasado sin que el backend vuelva a validar su fecha.
 
 ### Estado compartido
@@ -29,7 +29,8 @@
 - Store `sesion` (stores/sesion.js): usuario de Supabase Auth y su perfil (nombre y rol). Getters haySesion y rolTexto. Acciones cargarSesion, login y logout.
 - Store `eventos` (stores/eventos.js): eventos de la página cargada, total, página, tamaño (10), si se está cargando y el error. Getter totalPaginas. La acción cargarPagina(pagina, filtros) llama a buscarEventos, que filtra y pagina en el servidor, y guarda los filtros de la búsqueda cargada (getter hayFiltros). Las fechas se envían como el principio del día "desde" y el final del día "hasta"; si llegan respuestas desordenadas, solo se guarda la de la última petición.
   - También guarda el evento del detalle (evento, cargandoEvento y errorEvento) y tiene las acciones cargarEvento, crearEvento, modificarEvento y eliminarEvento. Al modificar se actualiza el evento del detalle; el listado no se toca, porque se vuelve a pedir al entrar en /eventos.
-- Store `sesion` tiene también el getter esOrganizador, que usan el listado y el router.
+  - Las propuestas del detalle son las de evento.propuestas, que obtenerEvento devuelve ya filtradas por RLS (el organizador del evento ve todas, un DJ solo la suya). Las acciones enviarPropuesta y retirarPropuesta llaman a propuestas.js y añaden o quitan la propuesta de esa lista, sin volver a pedir el evento.
+- Store `sesion` tiene también los getters esOrganizador y esDj, que usan el listado, el detalle y el router.
 - Supabase guarda la sesión en localStorage. main.js espera a cargarSesion antes de montar la aplicación, para que al recargar no se vea un momento la interfaz de "sin sesión".
 - El estado de los formularios (campos, errores, si se está enviando) se queda en cada vista.
 
@@ -54,7 +55,9 @@
 - PaginacionEventos: botones "Anterior" y "Siguiente", página actual, total de páginas y total de eventos
 - BusquedaEventos: formulario de búsqueda (ciudad, género, desde y hasta) relleno con los filtros de la URL. Emite los filtros no vacíos y EventosView los pone en la URL. Si una búsqueda no tiene resultados, EventosView muestra "No hay eventos que coincidan con la búsqueda" con "Quitar filtros".
 - TarjetaEvento es un enlace al detalle; EventosView tiene el botón "Nuevo evento" para los organizadores
-- DetalleEventoView: datos del evento, "Evento no encontrado", y "Editar" y "Eliminar" solo para su organizador. Eliminar pide confirmación con ConfirmDialog (ConfirmationService registrado en main.js).
+- DetalleEventoView: datos del evento, "Evento no encontrado", y "Editar" y "Eliminar" solo para su organizador. Eliminar pide confirmación con ConfirmDialog (ConfirmationService registrado en main.js). Muestra PropuestasEvento solo al organizador del evento y a los DJs.
+- PropuestasEvento: lista de propuestas (precio, duración, descripción y fecha de envío), "Todavía no hay propuestas" para el organizador, el formulario para un DJ sin propuesta en un evento abierto, "Este evento ya no acepta propuestas" si no está abierto, y "Retirar" en la propuesta del DJ, con el mismo ConfirmDialog del detalle.
+- FormularioPropuesta: precio, duración y descripción, con los errores por campo y el botón cargando
 - FormularioEvento: formulario común a crear y editar, con la validación y los errores por campo. Emite "guardar" con los datos; el campo de estado solo sale al editar.
 - NuevoEventoView y EditarEventoView: usan FormularioEvento, llaman al store y muestran el error del backend si falla
 
