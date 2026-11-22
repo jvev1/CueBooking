@@ -7,6 +7,7 @@ import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
 import Tag from 'primevue/tag'
 import { useConfirm } from 'primevue/useconfirm'
+import PropuestasEvento from '@/components/PropuestasEvento.vue'
 import { useEventosStore } from '@/stores/eventos.js'
 import { useSesionStore } from '@/stores/sesion.js'
 import { formatearFecha, formatearPresupuesto, nombreEstado, severidadEstado } from '@/utils/formato.js'
@@ -34,6 +35,9 @@ const evento = computed(() => eventos.evento)
 
 // Editar y eliminar solo los ve el organizador del evento (RLS lo vuelve a comprobar en el backend)
 const esSuyo = computed(() => sesion.haySesion && evento.value?.organizador_id === sesion.usuario.id)
+
+// La sección de propuestas solo la ven el organizador del evento y los DJs
+const verPropuestas = computed(() => esSuyo.value || sesion.esDj)
 
 function pedirConfirmacion() {
   confirm.require({
@@ -119,9 +123,15 @@ async function eliminar() {
       />
     </div>
   </article>
+
+  <PropuestasEvento v-if="evento && !eventos.cargandoEvento && verPropuestas" :evento="evento" class="seccion-propuestas" />
 </template>
 
 <style scoped>
+.seccion-propuestas {
+  margin-top: 1.5rem;
+}
+
 .volver {
   display: inline-block;
   margin-bottom: 1rem;
