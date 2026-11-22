@@ -36,6 +36,15 @@ Que desde el detalle de un evento los DJs puedan enviar y retirar sus propuestas
 
 ## PLAN
 
+1. Store `eventos`: obtenerEvento ya devuelve el evento con las propuestas que el usuario puede ver según RLS, así que se usan las de evento.propuestas. Añadir las acciones enviarPropuesta(eventoId, datos) y retirarPropuesta(id), que llaman a propuestas.js y añaden o quitan la propuesta de evento.propuestas, para que la lista cambie sin recargar.
+2. Añadir validarFormularioPropuesta al validacion.js del backend, con las mismas reglas que validarPropuesta, pero que devuelve los errores por campo, como en los otros formularios.
+3. Componentes:
+   - PropuestasEvento: sección del detalle con la lista de propuestas (precio, duración, descripción y fecha de envío), el mensaje de "Todavía no hay propuestas" para el organizador, el formulario para el DJ que no ha enviado ninguna, "Este evento ya no acepta propuestas" si el evento no está abierto, y "Retirar" en la propuesta del DJ, con confirmación (ConfirmDialog, el mismo del detalle).
+   - FormularioPropuesta: precio y duración con InputNumber y descripción con Textarea de PrimeVue, con los errores debajo de cada campo y el botón cargando.
+   - DetalleEventoView muestra PropuestasEvento solo al organizador del evento y a los DJs.
+4. Función de formato para la duración (por ejemplo "90 min") en utils/formato.js. El precio usa la misma que el presupuesto.
+5. Tests automáticos en frontend-vue/tests con los servicios sustituidos por mocks. Actualizar ARCHITECTURE.md.
+
 ## TEST_PLAN
 
 ## AI_LOG
