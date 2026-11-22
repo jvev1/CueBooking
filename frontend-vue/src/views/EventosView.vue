@@ -6,8 +6,10 @@ import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
 import TarjetaEvento from '@/components/TarjetaEvento.vue'
 import PaginacionEventos from '@/components/PaginacionEventos.vue'
+import BusquedaEventos from '@/components/BusquedaEventos.vue'
 import { useEventosStore } from '@/stores/eventos.js'
 import { useSesionStore } from '@/stores/sesion.js'
+import { filtrosDeLaUrl } from '@/utils/busqueda.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,15 +22,34 @@ const paginaUrl = computed(() => {
   return typeof valor === 'string' && /^[1-9]\d*$/.test(valor) ? Number(valor) : 1
 })
 
-// Cada vez que cambia la página de la URL (botones, atrás/adelante o enlace directo) se carga
-watch(paginaUrl, (pagina) => store.cargarPagina(pagina), { immediate: true })
+/** Filtros de búsqueda de la URL (?ciudad=Alicante&genero=techno&desde=2027-01-01&hasta=...). */
+const filtrosUrl = computed(() => filtrosDeLaUrl(route.query))
+
+// Cada vez que cambian la página o los filtros de la URL (buscar, botones, atrás/adelante
+// o enlace directo) se carga. Se compara el texto de los filtros para no recargar si no cambian.
+watch(
+  [paginaUrl, () => JSON.stringify(filtrosUrl.value)],
+  () => {
+    // Al salir del listado (por ejemplo, al abrir un detalle) la URL cambia antes de que
+    // se desmonte la vista: en ese caso no se carga nada
+    if (route.name !== 'eventos') return
+    store.cargarPagina(paginaUrl.value, filtrosUrl.value)
+  },
+  { immediate: true }
+)
 
 // Hay eventos, pero la página pedida está más allá de la última
 const paginaNoExiste = computed(() => store.total > 0 && store.eventos.length === 0)
 
 async function irAPagina(pagina) {
-  await router.push({ name: 'eventos', query: { pagina } })
+  // Al cambiar de página se mantienen los filtros de la búsqueda
+  await router.push({ name: 'eventos', query: { ...filtrosUrl.value, pagina } })
   window.scrollTo({ top: 0 })
+}
+
+/** Una búsqueda nueva siempre empieza en la página 1. Con filtros vacíos es el listado completo. */
+function buscar(filtros) {
+  router.push({ name: 'eventos', query: { ...filtros, pagina: 1 } })
 }
 </script>
 
@@ -46,13 +67,20 @@ async function irAPagina(pagina) {
     />
   </div>
 
+  <BusquedaEventos :filtros="filtrosUrl" @buscar="buscar" />
+
   <div v-if="store.cargando" class="estado" data-test="cargando">
     <ProgressSpinner style="width: 48px; height: 48px" stroke-width="4" aria-label="Cargando eventos" />
   </div>
 
   <div v-else-if="store.error" class="estado">
     <Message severity="error" data-test="error">{{ store.error }}</Message>
-    <Button label="Reintentar" icon="pi pi-refresh" data-test="reintentar" @click="store.cargarPagina(paginaUrl)" />
+    <Button label="Reintentar" icon="pi pi-refresh" data-test="reintentar" @click="store.cargarPagina(paginaUrl, filtrosUrl)" />
+  </div>
+
+  <div v-else-if="store.total === 0 && store.hayFiltros" class="estado">
+    <Message severity="info" data-test="sin-resultados">No hay eventos que coincidan con la búsqueda</Message>
+    <Button label="Quitar filtros" severity="secondary" data-test="quitar-filtros-resultado" @click="buscar({})" />
   </div>
 
   <div v-else-if="store.total === 0" class="estado">
