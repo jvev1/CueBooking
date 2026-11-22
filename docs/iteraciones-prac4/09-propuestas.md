@@ -47,6 +47,32 @@ Que desde el detalle de un evento los DJs puedan enviar y retirar sus propuestas
 
 ## TEST_PLAN
 
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Validar la propuesta sin precio ni duración | Error en los dos campos | |
+| Validar con precio negativo | Error en el precio | |
+| Validar con duración 0, 721 o con decimales | Error en la duración | |
+| Validar con descripción de más de 1000 caracteres | Error en la descripción | |
+| Validar con datos correctos | Sin errores | |
+| Enviar una propuesta en el store | Llama al servicio y la añade a las propuestas del evento | |
+| Retirar una propuesta en el store | Llama al servicio y la quita de las propuestas del evento | |
+| Formatear la duración | "90 min" | |
+| Detalle sin sesión o con otro organizador | No se ve la sección "Propuestas" | |
+| Detalle con el organizador del evento | Ve todas las propuestas con precio, duración, descripción y fecha de envío, sin formulario | |
+| Organizador sin propuestas | "Todavía no hay propuestas para este evento" | |
+| DJ sin propuesta en un evento abierto | Ve el formulario | |
+| DJ con su propuesta | Ve su propuesta con "Retirar" y no ve el formulario | |
+| DJ en un evento cerrado o completado | "Este evento ya no acepta propuestas" y no ve el formulario | |
+| Enviar el formulario vacío | Errores debajo de cada campo y no se llama al backend | |
+| Enviar una propuesta correcta | Aparece en la lista sin recargar y deja de verse el formulario | |
+| Mientras se envía | Botón cargando y desactivado | |
+| El backend devuelve un error al enviar | Se muestra su mensaje ("Ya has enviado una propuesta a este evento") | |
+| Pulsar "Retirar" | Sale el diálogo de confirmación | |
+| Cancelar la retirada | No se retira y la propuesta sigue en la lista | |
+| Confirmar la retirada | Desaparece de la lista y vuelve a salir el formulario | |
+| El backend devuelve un error al retirar | Se muestra su mensaje y la propuesta sigue en la lista | |
+| Tests de las iteraciones anteriores | Todos pasan | |
+
 ## AI_LOG
 
 ### Herramienta usada
