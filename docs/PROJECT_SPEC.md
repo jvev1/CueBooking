@@ -36,3 +36,15 @@ Cada evento lo crea un organizador. Un evento puede recibir muchas propuestas de
 - Pagos reales.
 - Firma de contratos legales.
 - Reproducción en streaming de sesiones.
+
+## Frontend (práctica 4)
+
+El frontend en Vue implementa:
+
+- Iniciar y cerrar sesión, mostrando el usuario y su rol.
+- Listar eventos con paginación y buscarlos por ciudad, género y fechas.
+- Ver el detalle de un evento.
+- Crear, editar y borrar eventos (solo el organizador del evento).
+- Ver las propuestas de un evento, enviar una propuesta y retirarla (desde el detalle).
+
+

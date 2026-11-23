@@ -98,7 +98,7 @@ Implementa el paso 3 del PLAN de `docs/iteraciones-prac4/09-propuestas.md`. Teni
 
 ### Correcciones manuales
 - Al enviar la propuesta, el formulario desaparecía y en su lugar salía la propuesta sin ninguna indicación, así que no quedaba claro que era la del DJ y que ya estaba enviada. Añadí un Tag "Tu propuesta" cuando la propuesta es del usuario de la sesión (propuesta.dj_id === sesion.usuario.id).
-- Añadí la acción cargarNombresDj, que obtiene el nombre de cada DJ con obtenerPerfil y lo guarda en nombresDj por su id, porque las propuestas solo guardan el dj_id. Si no se puede obtener un nombre, la propuesta se sigue mostrando sin él.
+- Añadí la función cargarNombresDj, que obtiene el nombre de cada DJ con obtenerPerfil y lo guarda en nombresDj por su id, porque las propuestas solo guardan el dj_id. Si no se puede obtener un nombre, la propuesta se sigue mostrando sin él.
 
 ## COMMITS RELACIONADOS
 3a85dab5f4d0d8c196278c6400b859c7ad9a17cf - spec it9
