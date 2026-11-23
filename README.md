@@ -4,6 +4,7 @@ Aplicación para que organizadores de eventos publiquen fechas y necesidades mus
 
 - **Backend**: **Supabase** (PostgreSQL + Auth), expuesto mediante una **capa de servicios en JavaScript** (`src/services/`), de forma que el cliente no necesita conocer la API de Supabase.
 - **Frontend**: **Vue 3** con Pinia, Vue Router y PrimeVue, en `frontend-vue/`.
+- **Frontend parcial en React** (requerimiento adicional): listado y borrado de eventos, en `frontend-react/`.
 
 ## Estructura
 
@@ -21,6 +22,7 @@ src/
 scripts/               Scripts auxiliares (usuarios de prueba)
 tests/                 Pruebas automatizadas del backend (Vitest)
 frontend-vue/          Frontend en Vue
+frontend-react/        Frontend parcial en React (listado y borrado de eventos)
 ```
 
 ## Backend
@@ -81,6 +83,10 @@ Si ya existen, el script solo comprueba que se puede iniciar sesión con ellos.
    ```
 
 El frontend usa la capa de servicios de `src/services` (alias `@backend`), así que necesita la carpeta `src` de la raíz, pero no su `node_modules`.
+
+## Frontend parcial en React
+
+Listado y borrado de eventos con React, usando la misma capa de servicios (`src/services`). Las instrucciones y las diferencias con Vue están en [frontend-react/README.md](frontend-react/README.md). Se instala y se prueba igual que el de Vue (`npm install`, `.env` a partir de `.env.example`, `npm run dev` y `npm test`, dentro de `frontend-react`).
 
 ## Autor
 

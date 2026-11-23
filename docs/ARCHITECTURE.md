@@ -61,6 +61,15 @@
 - FormularioEvento: formulario común a crear y editar, con la validación y los errores por campo. Emite "guardar" con los datos; el campo de estado solo sale al editar.
 - NuevoEventoView y EditarEventoView: usan FormularioEvento, llaman al store y muestran el error del backend si falla
 
+## Frontend parcial en React
+
+- Proyecto aparte en /frontend-react (React con Vite), con listado paginado y borrado de eventos, y login y logout.
+- Usa la misma capa de servicios (alias `@backend` en vite.config.js, con `server.fs.allow` y `resolve.dedupe`, como en Vue).
+- Estado: la sesión en un Context de React (SesionContext.jsx, con SesionProvider y useSesion); el listado, con useState en ListadoEventos.
+- Componentes: Cabecera (usuario y "Cerrar sesión", o Login), Login, ListadoEventos (página, carga, error, vacío, paginación y borrado) y TarjetaEvento ("Eliminar" solo para su organizador, con window.confirm).
+- Tests con Vitest y Testing Library en frontend-react/tests, con los servicios sustituidos por mocks.
+- Las diferencias con Vue en componentes y estado están en frontend-react/README.md.
+
 ## Tablas
 
 ### perfiles
@@ -117,6 +126,7 @@ Un DJ solo puede enviar una propuesta a cada evento. Si se borra el evento, se b
 - supabase/migrations: scripts SQL de tablas, triggers y políticas RLS
 - tests: pruebas automatizadas con Vitest
 - scripts/crear-usuarios-prueba.js: crea los usuarios de prueba fijos
+- frontend-react: frontend parcial en React (listado y borrado)
 - frontend-vue: frontend en Vue
   - src/utils: funciones de formato y de los filtros de búsqueda
   - src/stores: stores de Pinia
