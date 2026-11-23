@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
 import Tag from 'primevue/tag'
@@ -31,6 +31,14 @@ const errorRetirar = ref('')
 const propuestas = computed(() => props.evento.propuestas ?? [])
 const miPropuesta = computed(() => propuestas.value.find((p) => p.dj_id === sesion.usuario?.id) ?? null)
 const eventoAbierto = computed(() => props.evento.estado === 'abierto')
+
+watch(
+  () => propuestas.value.map((p) => p.dj_id),
+  (ids) => {
+    if (sesion.esOrganizador) eventos.cargarNombresDj(ids)
+  },
+  { immediate: true }
+)
 
 // El formulario solo sale a un DJ que todavía no ha enviado una propuesta a un evento abierto
 const puedeEnviar = computed(() => sesion.esDj && !miPropuesta.value && eventoAbierto.value)
@@ -80,6 +88,9 @@ async function retirar(propuesta) {
       <li v-for="propuesta in propuestas" :key="propuesta.id" class="propuesta" data-test="propuesta">
         <div class="datos">
           <Tag v-if="propuesta.dj_id === sesion.usuario?.id" value="Tu propuesta" severity="info" data-test="tu-propuesta" />
+          <span v-else-if="eventos.nombresDj[propuesta.dj_id]" data-test="propuesta-dj">
+            <i class="pi pi-user" /> {{ eventos.nombresDj[propuesta.dj_id] }}
+          </span>
           <span data-test="propuesta-precio-texto"><strong>{{ formatearPresupuesto(propuesta.precio) }}</strong></span>
           <span data-test="propuesta-duracion-texto"><i class="pi pi-clock" /> {{ formatearDuracion(propuesta.duracion_minutos) }}</span>
           <span class="enviada" data-test="propuesta-fecha">Enviada el {{ formatearFecha(propuesta.creado_en) }}</span>

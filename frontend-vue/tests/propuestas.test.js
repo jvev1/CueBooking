@@ -9,6 +9,7 @@ vi.mock('@backend/services/auth.js', () => ({ login: vi.fn(), logout: vi.fn(), u
 vi.mock('@backend/services/perfiles.js', () => ({ obtenerPerfil: vi.fn() }))
 
 import { obtenerEvento } from '@backend/services/eventos.js'
+import { obtenerPerfil } from '@backend/services/perfiles.js'
 import * as servicio from '@backend/services/propuestas.js'
 import { validarFormularioPropuesta } from '@backend/services/validacion.js'
 import { useEventosStore } from '@/stores/eventos.js'
@@ -167,6 +168,15 @@ describe('Propuestas', () => {
       expect(wrapper.find('[data-test="formulario-propuesta"]').exists()).toBe(false)
       expect(wrapper.find('[data-test="retirar"]').exists()).toBe(false)
       expect(wrapper.find('[data-test="tu-propuesta"]').exists()).toBe(false)
+    })
+
+    it('el organizador ve el nombre del DJ de cada propuesta', async () => {
+      conEvento({ propuestas: [propuesta('p1', 'dj-2'), propuesta('p2', 'dj-3')] })
+      obtenerPerfil.mockImplementation(async (id) => ({ id, nombre: id === 'dj-2' ? 'DJ Ana' : 'DJ Luis', rol: 'dj' }))
+      const { wrapper } = await montarDetalle('organizador')
+
+      expect(wrapper.findAll('[data-test="propuesta-dj"]').map((s) => s.text())).toEqual(['DJ Ana', 'DJ Luis'])
+      expect(obtenerPerfil).toHaveBeenCalledTimes(2)
     })
 
     it('el organizador sin propuestas ve "Todavía no hay propuestas para este evento"', async () => {

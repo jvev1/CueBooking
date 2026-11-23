@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import * as servicioEventos from '@backend/services/eventos.js'
 import * as servicioPropuestas from '@backend/services/propuestas.js'
+import { obtenerPerfil } from '@backend/services/perfiles.js'
 import { parametrosDeBusqueda } from '@/utils/busqueda.js'
 
 export const TAMANO_PAGINA = 10
@@ -30,6 +31,8 @@ export const useEventosStore = defineStore('eventos', {
 
     evento: null,
     cargandoEvento: false,
+    // Nombre de los DJs de las propuestas, por dj_id (las propuestas solo guardan el id)
+    nombresDj: {},
     errorEvento: null
   }),
 
@@ -107,6 +110,20 @@ export const useEventosStore = defineStore('eventos', {
         this.evento = { ...this.evento, propuestas: [...(this.evento.propuestas ?? []), propuesta] }
       }
       return propuesta
+    },
+
+    async cargarNombresDj(ids) {
+      const pendientes = [...new Set(ids)].filter((id) => !(id in this.nombresDj))
+      await Promise.all(
+        pendientes.map(async (id) => {
+          try {
+            const perfil = await obtenerPerfil(id)
+            if (perfil?.nombre) this.nombresDj = { ...this.nombresDj, [id]: perfil.nombre }
+          } catch {
+            // Sin el nombre la propuesta se sigue mostrando
+          }
+        })
+      )
     },
 
     async retirarPropuesta(id) {
