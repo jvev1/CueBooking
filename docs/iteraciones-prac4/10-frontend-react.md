@@ -80,11 +80,20 @@ Hacer en React, en un proyecto aparte, el listado y el borrado de eventos con el
 - Tipo: modelo en la nube
 
 ### Uso realizado
+- ayuda con el documento de la iteración (PLAN y TEST_PLAN)
+- ayuda con el código: proyecto React con Vite y el alias @backend, SesionContext, Cabecera, Login, ListadoEventos y TarjetaEvento
+- ayuda con los tests con Vitest y Testing Library (tests/app.test.jsx)
 
 ### Prompt importante 1
+Lee la SPEC de `docs/iteraciones-prac4/10-frontend-react.md` y cómo está montado el frontend de Vue (alias `@backend` en vite.config.js, store de sesión, EventosView). Propón un PLAN de 5 pasos numerados con el mismo formato que el de las iteraciones anteriores, para hacer lo mismo en React reutilizando la capa de servicios de `src/services`. No escribas código todavía.
 
 ### Decisión del estudiante:
-
-### Correcciones manuales
+- Acepté el PLAN de 5 pasos que propuso la IA, porque sigue el mismo orden que en Vue (proyecto, sesión, componentes, tests y documentación) y cubre todos los requisitos de la SPEC.
 
 ## COMMITS RELACIONADOS
+a040c3debd7af8a53c3a4d081a8a819aaed4481a - spec it 10
+1f17e93ae23e3ada4654d8632f4f3b6c5cceb5cb - plan it10
+ec71359b8e7183612d89fa8a4eaf4fd5e6cfdb7c - test plan
+5951db017a67caee42136da6530f276130981be4 - proyecto react y sesion
+f24dc46ffc3a68851f632c5b8dc2c85807787599 - listado y borrado de eventos en react
+8107051b04f25f1adee406c1ea15d4126fcdbd68 - tests y documentacion it10
