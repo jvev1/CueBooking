@@ -166,6 +166,7 @@ describe('Propuestas', () => {
       expect(items[0].find('[data-test="propuesta-fecha"]').text()).toBe('Enviada el 05/01/2027 18:30')
       expect(wrapper.find('[data-test="formulario-propuesta"]').exists()).toBe(false)
       expect(wrapper.find('[data-test="retirar"]').exists()).toBe(false)
+      expect(wrapper.find('[data-test="tu-propuesta"]').exists()).toBe(false)
     })
 
     it('el organizador sin propuestas ve "Todavía no hay propuestas para este evento"', async () => {
@@ -188,6 +189,7 @@ describe('Propuestas', () => {
       const { wrapper } = await montarDetalle('dj')
 
       expect(wrapper.findAll('[data-test="propuesta"]')).toHaveLength(1)
+      expect(wrapper.find('[data-test="tu-propuesta"]').text()).toBe('Tu propuesta')
       expect(wrapper.find('[data-test="retirar"]').exists()).toBe(true)
       expect(wrapper.find('[data-test="formulario-propuesta"]').exists()).toBe(false)
     })

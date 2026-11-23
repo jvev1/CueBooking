@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
+import Tag from 'primevue/tag'
 import { useConfirm } from 'primevue/useconfirm'
 import FormularioPropuesta from '@/components/FormularioPropuesta.vue'
 import { useEventosStore } from '@/stores/eventos.js'
@@ -78,6 +79,7 @@ async function retirar(propuesta) {
     <ul v-if="propuestas.length > 0" class="lista">
       <li v-for="propuesta in propuestas" :key="propuesta.id" class="propuesta" data-test="propuesta">
         <div class="datos">
+          <Tag v-if="propuesta.dj_id === sesion.usuario?.id" value="Tu propuesta" severity="info" data-test="tu-propuesta" />
           <span data-test="propuesta-precio-texto"><strong>{{ formatearPresupuesto(propuesta.precio) }}</strong></span>
           <span data-test="propuesta-duracion-texto"><i class="pi pi-clock" /> {{ formatearDuracion(propuesta.duracion_minutos) }}</span>
           <span class="enviada" data-test="propuesta-fecha">Enviada el {{ formatearFecha(propuesta.creado_en) }}</span>
