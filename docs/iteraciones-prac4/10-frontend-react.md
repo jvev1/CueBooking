@@ -47,3 +47,44 @@ Hacer en React, en un proyecto aparte, el listado y el borrado de eventos con el
    - TarjetaEvento: datos del evento y "Eliminar" solo para su organizador, con window.confirm antes de llamar a eliminarEvento
 4. Tests automáticos con Vitest y Testing Library en frontend-react/tests, con los servicios sustituidos por mocks.
 5. README de frontend-react con cómo instalarlo y arrancarlo y las diferencias con Vue. Añadir el extra al README principal y a ARCHITECTURE.md.
+
+## TEST_PLAN
+
+| Caso | Resultado esperado | Resultado |
+|---|---|---|
+| Login con el formulario vacío | Errores en los campos y no se llama al backend | OK |
+| Login correcto | Muestra el nombre, el rol y "Cerrar sesión" | OK |
+| Login incorrecto | "Email o contraseña incorrectos" | OK |
+| Cerrar sesión | Vuelve el formulario de login y desaparecen los botones "Eliminar" | OK |
+| Cargar la sesión guardada al arrancar | Se ve el usuario sin volver a iniciar sesión | OK |
+| Mientras se cargan los eventos | Indicador de carga | OK |
+| Listado con eventos | Título, fecha, ciudad y estado de cada uno | OK |
+| Listado vacío | "Todavía no hay eventos publicados" | OK |
+| Falla la carga | "No se han podido cargar los eventos" y "Reintentar", que vuelve a pedir la página | OK |
+| Pulsar "Siguiente" y "Anterior" | Pide la página siguiente o la anterior y actualiza la página actual | OK |
+| "Anterior" en la primera página y "Siguiente" en la última | Desactivados | OK |
+| "Eliminar" sin sesión, con un DJ o con otro organizador | No se ve | OK |
+| "Eliminar" con el organizador del evento | Se ve | OK |
+| Cancelar la confirmación | No se llama a eliminarEvento | OK |
+| Confirmar el borrado | Llama a eliminarEvento y vuelve a cargar la página | OK |
+| Borrar el único evento de la última página | Va a la página anterior | OK |
+| El backend devuelve un error al borrar | Se muestra su mensaje | OK |
+| Tests del frontend de Vue y del backend | Siguen pasando | OK |
+
+## AI_LOG
+
+### Herramienta usada
+
+- Herramienta: Claude Code
+- Modelo: Claude Opus 5.5
+- Tipo: modelo en la nube
+
+### Uso realizado
+
+### Prompt importante 1
+
+### Decisión del estudiante:
+
+### Correcciones manuales
+
+## COMMITS RELACIONADOS
