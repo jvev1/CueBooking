@@ -37,3 +37,13 @@ Hacer en React, en un proyecto aparte, el listado y el borrado de eventos con el
 - Búsqueda, router y propuestas.
 - Biblioteca de componentes.
 
+## PLAN
+
+1. Crear el proyecto en /frontend-react con `npm create vite@latest` (plantilla react). Añadir @supabase/supabase-js, el alias `@backend` a ../src en vite.config.js (con `server.fs.allow` y `resolve.dedupe`, como en Vue) y un .env.example con VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.
+2. Sesión: SesionContext con un proveedor que guarda el usuario y su perfil, carga la sesión al arrancar (usuarioActual y obtenerPerfil) y da las funciones login y logout. Si obtenerPerfil falla, se cierra la sesión, como en Vue.
+3. Componentes:
+   - Cabecera: nombre, rol y "Cerrar sesión" con sesión; formulario de login sin ella (Login, con validarLogin y el botón desactivado mientras se envía)
+   - ListadoEventos: página, total, carga y error con useState; pide la página con buscarEventos en un useEffect cada vez que cambia la página
+   - TarjetaEvento: datos del evento y "Eliminar" solo para su organizador, con window.confirm antes de llamar a eliminarEvento
+4. Tests automáticos con Vitest y Testing Library en frontend-react/tests, con los servicios sustituidos por mocks.
+5. README de frontend-react con cómo instalarlo y arrancarlo y las diferencias con Vue. Añadir el extra al README principal y a ARCHITECTURE.md.
